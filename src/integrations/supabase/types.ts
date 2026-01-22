@@ -14,7 +14,572 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      badges: {
+        Row: {
+          category: string | null
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          points_required: number | null
+        }
+        Insert: {
+          category?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          points_required?: number | null
+        }
+        Update: {
+          category?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          points_required?: number | null
+        }
+        Relationships: []
+      }
+      connections: {
+        Row: {
+          created_at: string | null
+          id: string
+          message: string | null
+          receiver_id: string
+          requester_id: string
+          status: Database["public"]["Enums"]["connection_status"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          message?: string | null
+          receiver_id: string
+          requester_id: string
+          status?: Database["public"]["Enums"]["connection_status"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          message?: string | null
+          receiver_id?: string
+          requester_id?: string
+          status?: Database["public"]["Enums"]["connection_status"] | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      conversation_participants: {
+        Row: {
+          conversation_id: string
+          id: string
+          joined_at: string | null
+          last_read_at: string | null
+          user_id: string
+        }
+        Insert: {
+          conversation_id: string
+          id?: string
+          joined_at?: string | null
+          last_read_at?: string | null
+          user_id: string
+        }
+        Update: {
+          conversation_id?: string
+          id?: string
+          joined_at?: string | null
+          last_read_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_participants_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          created_at: string | null
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      event_rsvps: {
+        Row: {
+          created_at: string | null
+          event_id: string
+          id: string
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          event_id: string
+          id?: string
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          event_id?: string
+          id?: string
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_rsvps_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          end_at: string | null
+          event_type: Database["public"]["Enums"]["event_type"] | null
+          host_id: string
+          id: string
+          image_url: string | null
+          is_vip: boolean | null
+          location: string
+          max_participants: number | null
+          price: number | null
+          scheduled_at: string
+          skill_level: Database["public"]["Enums"]["skill_level"] | null
+          sport: Database["public"]["Enums"]["sport_type"] | null
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          end_at?: string | null
+          event_type?: Database["public"]["Enums"]["event_type"] | null
+          host_id: string
+          id?: string
+          image_url?: string | null
+          is_vip?: boolean | null
+          location: string
+          max_participants?: number | null
+          price?: number | null
+          scheduled_at: string
+          skill_level?: Database["public"]["Enums"]["skill_level"] | null
+          sport?: Database["public"]["Enums"]["sport_type"] | null
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          end_at?: string | null
+          event_type?: Database["public"]["Enums"]["event_type"] | null
+          host_id?: string
+          id?: string
+          image_url?: string | null
+          is_vip?: boolean | null
+          location?: string
+          max_participants?: number | null
+          price?: number | null
+          scheduled_at?: string
+          skill_level?: Database["public"]["Enums"]["skill_level"] | null
+          sport?: Database["public"]["Enums"]["sport_type"] | null
+          title?: string
+        }
+        Relationships: []
+      }
+      feedback: {
+        Row: {
+          comment: string | null
+          created_at: string | null
+          energy_score: number | null
+          giver_id: string
+          id: string
+          receiver_id: string
+          reliability_score: number | null
+          session_id: string | null
+          skill_accuracy: boolean | null
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string | null
+          energy_score?: number | null
+          giver_id: string
+          id?: string
+          receiver_id: string
+          reliability_score?: number | null
+          session_id?: string | null
+          skill_accuracy?: boolean | null
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string | null
+          energy_score?: number | null
+          giver_id?: string
+          id?: string
+          receiver_id?: string
+          reliability_score?: number | null
+          session_id?: string | null
+          skill_accuracy?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      group_members: {
+        Row: {
+          group_id: string
+          id: string
+          joined_at: string | null
+          role: string | null
+          user_id: string
+        }
+        Insert: {
+          group_id: string
+          id?: string
+          joined_at?: string | null
+          role?: string | null
+          user_id: string
+        }
+        Update: {
+          group_id?: string
+          id?: string
+          joined_at?: string | null
+          role?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_members_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      groups: {
+        Row: {
+          city: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          is_private: boolean | null
+          name: string
+          sport: Database["public"]["Enums"]["sport_type"] | null
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_private?: boolean | null
+          name: string
+          sport?: Database["public"]["Enums"]["sport_type"] | null
+        }
+        Update: {
+          city?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_private?: boolean | null
+          name?: string
+          sport?: Database["public"]["Enums"]["sport_type"] | null
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          city: string | null
+          created_at: string | null
+          crypto_role: Database["public"]["Enums"]["crypto_role"] | null
+          id: string
+          is_online: boolean | null
+          is_verified: boolean | null
+          last_seen: string | null
+          mindset: Database["public"]["Enums"]["mindset_tag"] | null
+          name: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          city?: string | null
+          created_at?: string | null
+          crypto_role?: Database["public"]["Enums"]["crypto_role"] | null
+          id?: string
+          is_online?: boolean | null
+          is_verified?: boolean | null
+          last_seen?: string | null
+          mindset?: Database["public"]["Enums"]["mindset_tag"] | null
+          name: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          city?: string | null
+          created_at?: string | null
+          crypto_role?: Database["public"]["Enums"]["crypto_role"] | null
+          id?: string
+          is_online?: boolean | null
+          is_verified?: boolean | null
+          last_seen?: string | null
+          mindset?: Database["public"]["Enums"]["mindset_tag"] | null
+          name?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      session_participants: {
+        Row: {
+          id: string
+          joined_at: string | null
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          joined_at?: string | null
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          joined_at?: string | null
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_participants_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sessions: {
+        Row: {
+          created_at: string | null
+          crypto_focus: string | null
+          description: string | null
+          duration_minutes: number | null
+          host_id: string
+          id: string
+          is_live: boolean | null
+          latitude: number | null
+          location: string
+          longitude: number | null
+          max_participants: number | null
+          scheduled_at: string
+          skill_level: Database["public"]["Enums"]["skill_level"] | null
+          sport: Database["public"]["Enums"]["sport_type"]
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          crypto_focus?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          host_id: string
+          id?: string
+          is_live?: boolean | null
+          latitude?: number | null
+          location: string
+          longitude?: number | null
+          max_participants?: number | null
+          scheduled_at: string
+          skill_level?: Database["public"]["Enums"]["skill_level"] | null
+          sport: Database["public"]["Enums"]["sport_type"]
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          crypto_focus?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          host_id?: string
+          id?: string
+          is_live?: boolean | null
+          latitude?: number | null
+          location?: string
+          longitude?: number | null
+          max_participants?: number | null
+          scheduled_at?: string
+          skill_level?: Database["public"]["Enums"]["skill_level"] | null
+          sport?: Database["public"]["Enums"]["sport_type"]
+          title?: string
+        }
+        Relationships: []
+      }
+      user_badges: {
+        Row: {
+          badge_id: string
+          earned_at: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          badge_id: string
+          earned_at?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          badge_id?: string
+          earned_at?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_badges_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "badges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_points: {
+        Row: {
+          connections_made: number | null
+          created_at: string | null
+          current_streak: number | null
+          events_attended: number | null
+          id: string
+          longest_streak: number | null
+          sessions_attended: number | null
+          sessions_hosted: number | null
+          total_points: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          connections_made?: number | null
+          created_at?: string | null
+          current_streak?: number | null
+          events_attended?: number | null
+          id?: string
+          longest_streak?: number | null
+          sessions_attended?: number | null
+          sessions_hosted?: number | null
+          total_points?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          connections_made?: number | null
+          created_at?: string | null
+          current_streak?: number | null
+          events_attended?: number | null
+          id?: string
+          longest_streak?: number | null
+          sessions_attended?: number | null
+          sessions_hosted?: number | null
+          total_points?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_sports: {
+        Row: {
+          created_at: string | null
+          id: string
+          skill_level: number | null
+          sport: Database["public"]["Enums"]["sport_type"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          skill_level?: number | null
+          sport: Database["public"]["Enums"]["sport_type"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          skill_level?: number | null
+          sport?: Database["public"]["Enums"]["sport_type"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +588,12 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      connection_status: "pending" | "accepted" | "rejected"
+      crypto_role: "founder" | "trader" | "investor" | "vc" | "dev" | "marketer"
+      event_type: "tournament" | "meetup" | "retreat" | "camp" | "casual"
+      mindset_tag: "builder" | "competitor" | "strategist" | "investor"
+      skill_level: "beginner" | "intermediate" | "advanced" | "pro"
+      sport_type: "padel" | "tennis" | "golf" | "gym" | "running" | "combat"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +720,13 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      connection_status: ["pending", "accepted", "rejected"],
+      crypto_role: ["founder", "trader", "investor", "vc", "dev", "marketer"],
+      event_type: ["tournament", "meetup", "retreat", "camp", "casual"],
+      mindset_tag: ["builder", "competitor", "strategist", "investor"],
+      skill_level: ["beginner", "intermediate", "advanced", "pro"],
+      sport_type: ["padel", "tennis", "golf", "gym", "running", "combat"],
+    },
   },
 } as const
