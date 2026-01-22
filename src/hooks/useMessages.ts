@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useNotifications } from "@/hooks/useNotifications";
 
 export interface Message {
   id: string;
@@ -19,6 +20,7 @@ export const useMessages = (conversationId: string | null, userId: string | unde
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const { notifyNewMessage } = useNotifications();
 
   const fetchMessages = useCallback(async () => {
     if (!conversationId || !userId) {
@@ -103,19 +105,23 @@ export const useMessages = (conversationId: string | null, userId: string | unde
             { ...newMessage, sender_profile: profile || undefined },
           ]);
 
-          // Mark as read if not from current user
+          // Mark as read and notify if not from current user
           if (newMessage.sender_id !== userId) {
             await supabase
               .from("messages")
               .update({ is_read: true })
               .eq("id", newMessage.id);
+            
+            // Send browser notification
+            const senderName = profile?.name || "Someone";
+            notifyNewMessage(senderName, newMessage.content, conversationId);
           }
         }
       )
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      void supabase.removeChannel(channel);
     };
   }, [conversationId, userId, fetchMessages]);
 
