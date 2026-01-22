@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { BottomNav } from "@/components/BottomNav";
@@ -6,15 +6,17 @@ import { ChatView } from "@/components/ChatView";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, MessageCircle, Users, Plus } from "lucide-react";
+import { Search, MessageCircle, Users, Bell, BellOff } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useConversations, ConversationWithDetails } from "@/hooks/useConversations";
+import { useNotifications } from "@/hooks/useNotifications";
 import { formatDistanceToNow } from "date-fns";
 
 const Messages = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
   const { conversations, loading } = useConversations(user?.id);
+  const { isSupported, permission, requestPermission } = useNotifications();
   const [activeTab, setActiveTab] = useState("messages");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedConversation, setSelectedConversation] = useState<{
@@ -121,6 +123,30 @@ const Messages = () => {
             className="pl-10 bg-card border-border"
           />
         </div>
+
+        {/* Notification Permission Banner */}
+        {isSupported && permission === "default" && (
+          <div className="glass-card rounded-xl p-3 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Bell className="w-4 h-4 text-primary" />
+              <span className="text-sm text-muted-foreground">
+                Enable notifications for new messages
+              </span>
+            </div>
+            <Button size="sm" variant="gold" onClick={requestPermission}>
+              Enable
+            </Button>
+          </div>
+        )}
+        
+        {isSupported && permission === "denied" && (
+          <div className="glass-card rounded-xl p-3 flex items-center gap-2 opacity-60">
+            <BellOff className="w-4 h-4 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">
+              Notifications blocked - enable in browser settings
+            </span>
+          </div>
+        )}
 
         {/* Tabs */}
         <div className="flex gap-2">
