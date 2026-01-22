@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Header } from "@/components/Header";
 import { BottomNav } from "@/components/BottomNav";
 import { MapPreview } from "@/components/MapPreview";
@@ -66,7 +66,6 @@ const mockProfiles = [
 ];
 
 const Index = () => {
-  const [activeTab, setActiveTab] = useState("discover");
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -128,7 +127,7 @@ const Index = () => {
       </main>
 
       <CreateSessionButton />
-      <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+      <BottomNav />
     </div>
   );
 };

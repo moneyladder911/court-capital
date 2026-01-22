@@ -1,6 +1,7 @@
 import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Map, Calendar, Users, Trophy, User } from "lucide-react";
+import { Map, Calendar, Users, Trophy, User, MessageCircle } from "lucide-react";
 
 interface NavItemProps {
   icon: React.ReactNode;
@@ -13,7 +14,7 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, onClick }) => 
   <button
     onClick={onClick}
     className={cn(
-      "flex flex-col items-center justify-center gap-1 py-2 px-4 transition-all duration-200",
+      "flex flex-col items-center justify-center gap-1 py-2 px-3 transition-all duration-200",
       isActive
         ? "text-primary"
         : "text-muted-foreground hover:text-foreground"
@@ -29,19 +30,22 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, onClick }) => 
   </button>
 );
 
-interface BottomNavProps {
-  activeTab: string;
-  onTabChange: (tab: string) => void;
-}
+export const BottomNav: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) => {
   const navItems = [
-    { id: "discover", icon: <Map className="w-5 h-5" />, label: "Discover" },
-    { id: "sessions", icon: <Calendar className="w-5 h-5" />, label: "Sessions" },
-    { id: "network", icon: <Users className="w-5 h-5" />, label: "Network" },
-    { id: "events", icon: <Trophy className="w-5 h-5" />, label: "Events" },
-    { id: "profile", icon: <User className="w-5 h-5" />, label: "Profile" },
+    { id: "discover", path: "/", icon: <Map className="w-5 h-5" />, label: "Discover" },
+    { id: "events", path: "/events", icon: <Calendar className="w-5 h-5" />, label: "Events" },
+    { id: "messages", path: "/messages", icon: <MessageCircle className="w-5 h-5" />, label: "Messages" },
+    { id: "leaderboard", path: "/leaderboard", icon: <Trophy className="w-5 h-5" />, label: "Ranks" },
+    { id: "profile", path: "/profile", icon: <User className="w-5 h-5" />, label: "Profile" },
   ];
+
+  const isActive = (path: string) => {
+    if (path === "/") return location.pathname === "/";
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50">
@@ -52,8 +56,8 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) 
               key={item.id}
               icon={item.icon}
               label={item.label}
-              isActive={activeTab === item.id}
-              onClick={() => onTabChange(item.id)}
+              isActive={isActive(item.path)}
+              onClick={() => navigate(item.path)}
             />
           ))}
         </div>

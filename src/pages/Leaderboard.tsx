@@ -285,7 +285,7 @@ const Leaderboard = () => {
         </div>
       </main>
 
-      <BottomNav activeTab="leaderboard" onTabChange={() => {}} />
+      <BottomNav />
     </div>
   );
 };

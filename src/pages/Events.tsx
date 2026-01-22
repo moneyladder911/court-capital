@@ -261,7 +261,7 @@ const Events = () => {
         </div>
       </main>
 
-      <BottomNav activeTab="events" onTabChange={() => {}} />
+      <BottomNav />
     </div>
   );
 };

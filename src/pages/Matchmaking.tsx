@@ -317,7 +317,7 @@ const Matchmaking = () => {
         )}
       </main>
 
-      <BottomNav activeTab="discover" onTabChange={() => {}} />
+      <BottomNav />
     </div>
   );
 };
