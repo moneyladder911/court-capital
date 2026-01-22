@@ -30,7 +30,7 @@ export const LiveSessionBanner: React.FC = () => {
             </span>
             <span className="flex items-center gap-1 text-sm text-primary">
               <Clock className="w-4 h-4" />
-              Started 10m ago
+              Starts in 15m
             </span>
           </div>
         </div>
