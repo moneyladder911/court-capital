@@ -58,16 +58,16 @@ const Auth = () => {
 
         // Create profile after signup
         if (data.user) {
-          // @ts-ignore - types will regenerate after migration
-          await supabase.from("profiles").insert({
+          const profileData = {
             user_id: data.user.id,
             name: name || email.split("@")[0],
-          });
-
-          // @ts-ignore - types will regenerate after migration
-          await supabase.from("user_points").insert({
+          };
+          const pointsData = {
             user_id: data.user.id,
-          });
+          };
+          // Types will regenerate after migration syncs
+          await (supabase.from("profiles") as any).insert(profileData);
+          await (supabase.from("user_points") as any).insert(pointsData);
         }
 
         toast({ title: "Account created!", description: "Welcome to CHAINPLAY." });
