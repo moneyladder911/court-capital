@@ -280,7 +280,7 @@ const Connections = () => {
         )}
       </main>
 
-      <BottomNav activeTab="network" onTabChange={() => {}} />
+      <BottomNav />
     </div>
   );
 };

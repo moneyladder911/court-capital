@@ -175,7 +175,7 @@ const Messages = () => {
         )}
       </main>
 
-      <BottomNav activeTab="messages" onTabChange={() => {}} />
+      <BottomNav />
     </div>
   );
 };

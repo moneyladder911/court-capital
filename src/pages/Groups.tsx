@@ -267,7 +267,7 @@ const Groups = () => {
         )}
       </main>
 
-      <BottomNav activeTab="network" onTabChange={() => {}} />
+      <BottomNav />
     </div>
   );
 };
