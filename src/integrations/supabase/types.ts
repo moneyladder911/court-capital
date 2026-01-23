@@ -593,7 +593,15 @@ export type Database = {
       event_type: "tournament" | "meetup" | "retreat" | "camp" | "casual"
       mindset_tag: "builder" | "competitor" | "strategist" | "investor"
       skill_level: "beginner" | "intermediate" | "advanced" | "pro"
-      sport_type: "padel" | "tennis" | "golf" | "gym" | "running" | "combat"
+      sport_type:
+        | "padel"
+        | "tennis"
+        | "golf"
+        | "gym"
+        | "running"
+        | "combat"
+        | "yoga"
+        | "pilates"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -726,7 +734,16 @@ export const Constants = {
       event_type: ["tournament", "meetup", "retreat", "camp", "casual"],
       mindset_tag: ["builder", "competitor", "strategist", "investor"],
       skill_level: ["beginner", "intermediate", "advanced", "pro"],
-      sport_type: ["padel", "tennis", "golf", "gym", "running", "combat"],
+      sport_type: [
+        "padel",
+        "tennis",
+        "golf",
+        "gym",
+        "running",
+        "combat",
+        "yoga",
+        "pilates",
+      ],
     },
   },
 } as const

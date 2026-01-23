@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
-import { PadelIcon, TennisIcon, GolfIcon, GymIcon, RunningIcon, CombatIcon } from "@/components/icons/SportIcons";
+import { PadelIcon, TennisIcon, GolfIcon, GymIcon, RunningIcon, CombatIcon, YogaIcon, PilatesIcon } from "@/components/icons/SportIcons";
 
 interface FilterItem {
   id: string;
@@ -16,6 +16,8 @@ const filters: FilterItem[] = [
   { id: "gym", icon: GymIcon, label: "Gym" },
   { id: "running", icon: RunningIcon, label: "Running" },
   { id: "combat", icon: CombatIcon, label: "Combat" },
+  { id: "yoga", icon: YogaIcon, label: "Yoga" },
+  { id: "pilates", icon: PilatesIcon, label: "Pilates" },
 ];
 
 export const QuickFilters: React.FC = () => {

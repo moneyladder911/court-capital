@@ -14,7 +14,7 @@ import {
   Zap,
   Check,
 } from "lucide-react";
-import { PadelIcon, TennisIcon, GolfIcon, GymIcon, RunningIcon, CombatIcon } from "@/components/icons/SportIcons";
+import { PadelIcon, TennisIcon, GolfIcon, GymIcon, RunningIcon, CombatIcon, YogaIcon, PilatesIcon } from "@/components/icons/SportIcons";
 
 const sports = [
   { id: "padel", name: "Padel", icon: PadelIcon },
@@ -23,6 +23,8 @@ const sports = [
   { id: "gym", name: "Gym", icon: GymIcon },
   { id: "running", name: "Running", icon: RunningIcon },
   { id: "combat", name: "Combat", icon: CombatIcon },
+  { id: "yoga", name: "Yoga", icon: YogaIcon },
+  { id: "pilates", name: "Pilates", icon: PilatesIcon },
 ];
 
 const skillLevels = ["Beginner", "Intermediate", "Advanced", "Pro"];
