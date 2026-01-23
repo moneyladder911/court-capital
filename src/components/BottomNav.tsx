@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Map, Calendar, Users, Trophy, User, MessageCircle } from "lucide-react";
+import { Map, Calendar, Users, Trophy, User, MessageCircle, Lightbulb } from "lucide-react";
 
 interface NavItemProps {
   icon: React.ReactNode;
@@ -37,7 +37,7 @@ export const BottomNav: React.FC = () => {
   const navItems = [
     { id: "discover", path: "/", icon: <Map className="w-5 h-5" />, label: "Discover" },
     { id: "events", path: "/events", icon: <Calendar className="w-5 h-5" />, label: "Events" },
-    { id: "messages", path: "/messages", icon: <MessageCircle className="w-5 h-5" />, label: "Messages" },
+    { id: "lessons", path: "/lessons", icon: <Lightbulb className="w-5 h-5" />, label: "Lessons" },
     { id: "leaderboard", path: "/leaderboard", icon: <Trophy className="w-5 h-5" />, label: "Ranks" },
     { id: "profile", path: "/profile", icon: <User className="w-5 h-5" />, label: "Profile" },
   ];

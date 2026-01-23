@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { BottomNav } from "@/components/BottomNav";
 import { MapPreview } from "@/components/MapPreview";
@@ -9,6 +10,7 @@ import { ProfileCard } from "@/components/ProfileCard";
 import { CreateSessionButton } from "@/components/CreateSessionButton";
 import { StatsRow } from "@/components/StatsRow";
 import { EmergencySessionButton } from "@/components/EmergencySessionButton";
+import { LessonsFeed, Lesson } from "@/components/LessonsFeed";
 
 const mockSessions = [
   {
@@ -81,7 +83,38 @@ const mockProfiles = [
   },
 ];
 
+// Mock lessons for home feed preview
+const mockLessons: Lesson[] = [
+  {
+    id: "1",
+    lessonText: "The best networking happens when you're not trying to network. Just focus on the game and connections follow naturally.",
+    authorName: "Marcus W.",
+    authorRole: "VC Partner",
+    authorEnergyStyle: "strategic",
+    sport: "padel",
+    sessionTitle: "Morning Padel Match",
+    mood: "inspired",
+    upvotesCount: 24,
+    hasUpvoted: false,
+    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: "2",
+    lessonText: "Showing up consistently matters more than showing up perfectly. Your reputation is built one session at a time.",
+    authorName: "Elena M.",
+    authorRole: "Investor",
+    authorEnergyStyle: "competitive",
+    sport: "tennis",
+    sessionTitle: "Tennis Singles",
+    mood: "energized",
+    upvotesCount: 18,
+    hasUpvoted: true,
+    createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+  },
+];
+
 const Index = () => {
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -131,8 +164,29 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Network */}
+        {/* Community Lessons Preview */}
         <section className="slide-up" style={{ animationDelay: "0.35s" }}>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-display text-lg font-semibold text-foreground">
+              Community Lessons
+            </h2>
+            <button 
+              className="text-sm text-primary font-medium"
+              onClick={() => navigate("/lessons")}
+            >
+              See All
+            </button>
+          </div>
+          <LessonsFeed 
+            lessons={mockLessons} 
+            showHeader={false} 
+            compact 
+            maxItems={2} 
+          />
+        </section>
+
+        {/* Network */}
+        <section className="slide-up" style={{ animationDelay: "0.4s" }}>
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-display text-lg font-semibold text-foreground">
               People Near You

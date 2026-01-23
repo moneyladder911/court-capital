@@ -319,6 +319,35 @@ export type Database = {
         }
         Relationships: []
       }
+      lesson_upvotes: {
+        Row: {
+          created_at: string | null
+          id: string
+          reflection_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          reflection_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          reflection_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_upvotes_reflection_id_fkey"
+            columns: ["reflection_id"]
+            isOneToOne: false
+            referencedRelation: "session_reflections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           content: string
@@ -460,6 +489,56 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "session_participants_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      session_reflections: {
+        Row: {
+          created_at: string | null
+          id: string
+          lesson_is_public: boolean | null
+          lesson_text: string | null
+          participant_ratings: Json | null
+          post_mood: string | null
+          reflection_text: string | null
+          session_id: string | null
+          updated_at: string | null
+          upvotes_count: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          lesson_is_public?: boolean | null
+          lesson_text?: string | null
+          participant_ratings?: Json | null
+          post_mood?: string | null
+          reflection_text?: string | null
+          session_id?: string | null
+          updated_at?: string | null
+          upvotes_count?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          lesson_is_public?: boolean | null
+          lesson_text?: string | null
+          participant_ratings?: Json | null
+          post_mood?: string | null
+          reflection_text?: string | null
+          session_id?: string | null
+          updated_at?: string | null
+          upvotes_count?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_reflections_session_id_fkey"
             columns: ["session_id"]
             isOneToOne: false
             referencedRelation: "sessions"
