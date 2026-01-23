@@ -8,6 +8,7 @@ import { SessionCard, SportType } from "@/components/SessionCard";
 import { ProfileCard } from "@/components/ProfileCard";
 import { CreateSessionButton } from "@/components/CreateSessionButton";
 import { StatsRow } from "@/components/StatsRow";
+import { EmergencySessionButton } from "@/components/EmergencySessionButton";
 
 const mockSessions = [
   {
@@ -53,15 +54,27 @@ const mockProfiles = [
     sports: ["Padel", "Gym", "Golf"],
     isOnline: true,
     reliability: 94,
+    memberTier: "elite" as const,
   },
   {
     name: "Elena M.",
     city: "Dubai",
     role: "Investor",
     mindset: "Strategist",
-    sports: ["Tennis", "Running"],
+    sports: ["Tennis", "Yoga"],
     isOnline: false,
     reliability: 88,
+    memberTier: "inner_circle" as const,
+  },
+  {
+    name: "James W.",
+    city: "Dubai",
+    role: "Trader",
+    mindset: "Competitor",
+    sports: ["Padel", "Running"],
+    isOnline: true,
+    reliability: 76,
+    memberTier: "core" as const,
   },
 ];
 
@@ -72,6 +85,11 @@ const Index = () => {
       <Header />
 
       <main className="max-w-md mx-auto px-4 py-4 space-y-6">
+        {/* Emergency Session Button */}
+        <section className="slide-up" style={{ animationDelay: "0.05s" }}>
+          <EmergencySessionButton />
+        </section>
+
         {/* Stats Overview */}
         <section className="slide-up" style={{ animationDelay: "0.1s" }}>
           <StatsRow />

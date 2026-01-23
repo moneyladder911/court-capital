@@ -130,6 +130,19 @@
     }
   }
 
+  .animate-pulse-gold {
+    animation: pulse-gold 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse-gold {
+    0%, 100% {
+      box-shadow: 0 0 0 0 hsl(43 96% 56% / 0.4);
+    }
+    50% {
+      box-shadow: 0 0 0 4px hsl(43 96% 56% / 0);
+    }
+  }
+
   .card-hover {
     @apply transition-all duration-300;
   }
