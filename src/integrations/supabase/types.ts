@@ -356,6 +356,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          attendance_rate: number | null
           avatar_url: string | null
           bio: string | null
           city: string | null
@@ -363,14 +364,20 @@ export type Database = {
           crypto_role: Database["public"]["Enums"]["crypto_role"] | null
           id: string
           is_online: boolean | null
+          is_trusted: boolean | null
           is_verified: boolean | null
           last_seen: string | null
+          member_since: string | null
+          member_tier: Database["public"]["Enums"]["member_tier"] | null
           mindset: Database["public"]["Enums"]["mindset_tag"] | null
           name: string
+          no_shows: number | null
+          sessions_as_host: number | null
           updated_at: string | null
           user_id: string
         }
         Insert: {
+          attendance_rate?: number | null
           avatar_url?: string | null
           bio?: string | null
           city?: string | null
@@ -378,14 +385,20 @@ export type Database = {
           crypto_role?: Database["public"]["Enums"]["crypto_role"] | null
           id?: string
           is_online?: boolean | null
+          is_trusted?: boolean | null
           is_verified?: boolean | null
           last_seen?: string | null
+          member_since?: string | null
+          member_tier?: Database["public"]["Enums"]["member_tier"] | null
           mindset?: Database["public"]["Enums"]["mindset_tag"] | null
           name: string
+          no_shows?: number | null
+          sessions_as_host?: number | null
           updated_at?: string | null
           user_id: string
         }
         Update: {
+          attendance_rate?: number | null
           avatar_url?: string | null
           bio?: string | null
           city?: string | null
@@ -393,10 +406,15 @@ export type Database = {
           crypto_role?: Database["public"]["Enums"]["crypto_role"] | null
           id?: string
           is_online?: boolean | null
+          is_trusted?: boolean | null
           is_verified?: boolean | null
           last_seen?: string | null
+          member_since?: string | null
+          member_tier?: Database["public"]["Enums"]["member_tier"] | null
           mindset?: Database["public"]["Enums"]["mindset_tag"] | null
           name?: string
+          no_shows?: number | null
+          sessions_as_host?: number | null
           updated_at?: string | null
           user_id?: string
         }
@@ -585,12 +603,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      calculate_member_tier: {
+        Args: {
+          p_attendance_rate: number
+          p_is_trusted: boolean
+          p_sessions_attended: number
+          p_sessions_hosted: number
+          p_total_points: number
+        }
+        Returns: Database["public"]["Enums"]["member_tier"]
+      }
     }
     Enums: {
       connection_status: "pending" | "accepted" | "rejected"
       crypto_role: "founder" | "trader" | "investor" | "vc" | "dev" | "marketer"
       event_type: "tournament" | "meetup" | "retreat" | "camp" | "casual"
+      member_tier: "explorer" | "core" | "elite" | "inner_circle"
       mindset_tag: "builder" | "competitor" | "strategist" | "investor"
       skill_level: "beginner" | "intermediate" | "advanced" | "pro"
       sport_type:
@@ -732,6 +760,7 @@ export const Constants = {
       connection_status: ["pending", "accepted", "rejected"],
       crypto_role: ["founder", "trader", "investor", "vc", "dev", "marketer"],
       event_type: ["tournament", "meetup", "retreat", "camp", "casual"],
+      member_tier: ["explorer", "core", "elite", "inner_circle"],
       mindset_tag: ["builder", "competitor", "strategist", "investor"],
       skill_level: ["beginner", "intermediate", "advanced", "pro"],
       sport_type: [
