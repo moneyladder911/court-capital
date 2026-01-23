@@ -54,3 +54,26 @@ export const CombatIcon = ({ className }: { className?: string }) => (
     <path d="M9 10h6M9 14h6" />
   </svg>
 );
+
+export const YogaIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <circle cx="12" cy="4" r="2" />
+    <path d="M12 6v4" />
+    <path d="M12 10l-6 4v2" />
+    <path d="M12 10l6 4v2" />
+    <path d="M12 14v6" />
+    <path d="M8 20h8" />
+  </svg>
+);
+
+export const PilatesIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <circle cx="12" cy="4" r="2" />
+    <path d="M12 6v5" />
+    <path d="M8 11h8" />
+    <path d="M6 15c0-2 2.5-3 6-3s6 1 6 3" />
+    <path d="M9 15l-2 5" />
+    <path d="M15 15l2 5" />
+    <ellipse cx="12" cy="18" rx="4" ry="1.5" />
+  </svg>
+);
