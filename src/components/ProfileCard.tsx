@@ -1,33 +1,35 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Zap } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { MemberTierBadge, TierRing, type MemberTier } from "@/components/MemberTierBadge";
+import { EnergyBadge, type EnergyStyle } from "@/components/EnergyBadge";
+import { CryptoFocusList, type CryptoFocus } from "@/components/CryptoFocusBadge";
 
 interface ProfileCardProps {
   name: string;
   city: string;
   role: string;
-  mindset: string;
   sports: string[];
   avatar?: string;
   isOnline?: boolean;
   reliability: number;
   memberTier?: MemberTier;
-  memberSince?: string;
+  energyStyle?: EnergyStyle;
+  cryptoFocus?: CryptoFocus[];
 }
 
 export const ProfileCard: React.FC<ProfileCardProps> = ({
   name,
   city,
   role,
-  mindset,
   sports,
   avatar,
   isOnline,
   reliability,
   memberTier = "explorer",
-  memberSince,
+  energyStyle = "social",
+  cryptoFocus = [],
 }) => {
   return (
     <div className="glass-card rounded-xl p-4 card-hover fade-in">
@@ -64,9 +66,15 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
             <MapPin className="w-3.5 h-3.5" />
             <span>{city}</span>
             <span className="text-border">•</span>
-            <Zap className="w-3.5 h-3.5 text-primary" />
-            <span className="text-primary">{mindset}</span>
+            <EnergyBadge energy={energyStyle} size="sm" />
           </div>
+
+          {/* Crypto Focus */}
+          {cryptoFocus.length > 0 && (
+            <div className="mb-2">
+              <CryptoFocusList focuses={cryptoFocus} size="sm" max={3} />
+            </div>
+          )}
 
           {/* Sports */}
           <div className="flex flex-wrap gap-1.5 mb-3">
@@ -81,7 +89,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground">Reliability</span>
-              <div className="w-20 h-1.5 rounded-full bg-muted overflow-hidden">
+              <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
                 <div
                   className="h-full bg-gradient-gold rounded-full"
                   style={{ width: `${reliability}%` }}
