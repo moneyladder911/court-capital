@@ -357,16 +357,22 @@ export type Database = {
       profiles: {
         Row: {
           attendance_rate: number | null
+          availability:
+            | Database["public"]["Enums"]["availability_pattern"][]
+            | null
           avatar_url: string | null
           bio: string | null
           city: string | null
           created_at: string | null
+          crypto_focus: string[] | null
           crypto_role: Database["public"]["Enums"]["crypto_role"] | null
+          energy_style: Database["public"]["Enums"]["energy_style"] | null
           id: string
           is_online: boolean | null
           is_trusted: boolean | null
           is_verified: boolean | null
           last_seen: string | null
+          looking_for: string[] | null
           member_since: string | null
           member_tier: Database["public"]["Enums"]["member_tier"] | null
           mindset: Database["public"]["Enums"]["mindset_tag"] | null
@@ -378,16 +384,22 @@ export type Database = {
         }
         Insert: {
           attendance_rate?: number | null
+          availability?:
+            | Database["public"]["Enums"]["availability_pattern"][]
+            | null
           avatar_url?: string | null
           bio?: string | null
           city?: string | null
           created_at?: string | null
+          crypto_focus?: string[] | null
           crypto_role?: Database["public"]["Enums"]["crypto_role"] | null
+          energy_style?: Database["public"]["Enums"]["energy_style"] | null
           id?: string
           is_online?: boolean | null
           is_trusted?: boolean | null
           is_verified?: boolean | null
           last_seen?: string | null
+          looking_for?: string[] | null
           member_since?: string | null
           member_tier?: Database["public"]["Enums"]["member_tier"] | null
           mindset?: Database["public"]["Enums"]["mindset_tag"] | null
@@ -399,16 +411,22 @@ export type Database = {
         }
         Update: {
           attendance_rate?: number | null
+          availability?:
+            | Database["public"]["Enums"]["availability_pattern"][]
+            | null
           avatar_url?: string | null
           bio?: string | null
           city?: string | null
           created_at?: string | null
+          crypto_focus?: string[] | null
           crypto_role?: Database["public"]["Enums"]["crypto_role"] | null
+          energy_style?: Database["public"]["Enums"]["energy_style"] | null
           id?: string
           is_online?: boolean | null
           is_trusted?: boolean | null
           is_verified?: boolean | null
           last_seen?: string | null
+          looking_for?: string[] | null
           member_since?: string | null
           member_tier?: Database["public"]["Enums"]["member_tier"] | null
           mindset?: Database["public"]["Enums"]["mindset_tag"] | null
@@ -615,8 +633,16 @@ export type Database = {
       }
     }
     Enums: {
+      availability_pattern:
+        | "early_bird"
+        | "lunch_warrior"
+        | "after_work"
+        | "night_owl"
+        | "weekends"
+        | "flexible"
       connection_status: "pending" | "accepted" | "rejected"
       crypto_role: "founder" | "trader" | "investor" | "vc" | "dev" | "marketer"
+      energy_style: "competitive" | "social" | "strategic" | "learning"
       event_type: "tournament" | "meetup" | "retreat" | "camp" | "casual"
       member_tier: "explorer" | "core" | "elite" | "inner_circle"
       mindset_tag: "builder" | "competitor" | "strategist" | "investor"
@@ -757,8 +783,17 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      availability_pattern: [
+        "early_bird",
+        "lunch_warrior",
+        "after_work",
+        "night_owl",
+        "weekends",
+        "flexible",
+      ],
       connection_status: ["pending", "accepted", "rejected"],
       crypto_role: ["founder", "trader", "investor", "vc", "dev", "marketer"],
+      energy_style: ["competitive", "social", "strategic", "learning"],
       event_type: ["tournament", "meetup", "retreat", "camp", "casual"],
       member_tier: ["explorer", "core", "elite", "inner_circle"],
       mindset_tag: ["builder", "competitor", "strategist", "investor"],
