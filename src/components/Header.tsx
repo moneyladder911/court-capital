@@ -1,12 +1,18 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Bell, Search } from "lucide-react";
 
 export const Header: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <header className="sticky top-0 z-40 glass-card border-b border-border">
       <div className="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
-        <div>
+        <button 
+          onClick={() => navigate("/")} 
+          className="text-left focus:outline-none"
+        >
           <h1 className="font-display text-xl font-bold">
             <span className="gold-text">CHAIN</span>
             <span className="text-foreground">PLAY</span>
@@ -14,7 +20,7 @@ export const Header: React.FC = () => {
           <p className="text-[10px] text-muted-foreground tracking-wider uppercase">
             Build Deals. Build Bodies.
           </p>
-        </div>
+        </button>
 
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" className="h-9 w-9">
