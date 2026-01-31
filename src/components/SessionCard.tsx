@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Users, Clock } from "lucide-react";
 import { PadelIcon, TennisIcon, GolfIcon, GymIcon, RunningIcon, CombatIcon } from "@/components/icons/SportIcons";
+import { SessionIntentBadge, SessionIntent } from "./SessionIntentBadge";
 
 export type SportType = "padel" | "tennis" | "golf" | "gym" | "running" | "combat";
 
@@ -16,6 +17,7 @@ interface SessionCardProps {
   skillLevel: string;
   isLive?: boolean;
   cryptoFocus?: string;
+  sessionIntent?: SessionIntent[];
   host: {
     name: string;
     role: string;
@@ -51,6 +53,7 @@ export const SessionCard: React.FC<SessionCardProps> = ({
   skillLevel,
   isLive,
   cryptoFocus,
+  sessionIntent,
   host,
 }) => {
   const SportIcon = sportIcons[sport];
@@ -75,7 +78,7 @@ export const SessionCard: React.FC<SessionCardProps> = ({
             )}
           </div>
 
-          <div className="flex items-center gap-3 text-sm text-muted-foreground mb-3">
+          <div className="flex items-center gap-3 text-sm text-muted-foreground mb-2">
             <span className="flex items-center gap-1">
               <MapPin className="w-3.5 h-3.5" />
               {location}
@@ -85,6 +88,15 @@ export const SessionCard: React.FC<SessionCardProps> = ({
               {time}
             </span>
           </div>
+
+          {/* Session Intent Tags */}
+          {sessionIntent && sessionIntent.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-2">
+              {sessionIntent.map((intent) => (
+                <SessionIntentBadge key={intent} intent={intent} size="sm" />
+              ))}
+            </div>
+          )}
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-3">

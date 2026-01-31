@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Header } from "@/components/Header";
 import { BottomNav } from "@/components/BottomNav";
+import { TopMatchCard } from "@/components/TopMatchCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,8 +15,20 @@ import {
   Check,
   X,
   Heart,
+  Filter,
 } from "lucide-react";
 import { PadelIcon, TennisIcon, GolfIcon, GymIcon, RunningIcon, CombatIcon } from "@/components/icons/SportIcons";
+import { calculateMatchScore, MatchReason } from "@/lib/matchScoreCalculator";
+import { EnergyBadge } from "@/components/EnergyBadge";
+import { CryptoFocusBadge } from "@/components/CryptoFocusBadge";
+
+// Mock current user profile for matching
+const currentUserProfile = {
+  energyStyle: "competitive",
+  cryptoFocus: ["defi", "ai", "trading"],
+  city: "Dubai",
+  skillLevel: 8,
+};
 
 interface Match {
   id: string;
@@ -23,11 +36,15 @@ interface Match {
   role: string;
   city: string;
   mindset: string;
+  energyStyle: "competitive" | "social" | "strategic" | "learning";
+  cryptoFocus: string[];
   sports: { name: string; skill: number }[];
   reliability: number;
   compatibility: number;
   isOnline: boolean;
   matchReason: string;
+  matchScore?: number;
+  matchReasons?: MatchReason[];
 }
 
 const mockMatches: Match[] = [
@@ -37,6 +54,8 @@ const mockMatches: Match[] = [
     role: "VC Partner",
     city: "Dubai",
     mindset: "Investor",
+    energyStyle: "competitive",
+    cryptoFocus: ["defi", "vc"],
     sports: [
       { name: "Padel", skill: 8 },
       { name: "Golf", skill: 7 },
@@ -52,6 +71,8 @@ const mockMatches: Match[] = [
     role: "Founder",
     city: "Dubai",
     mindset: "Builder",
+    energyStyle: "strategic",
+    cryptoFocus: ["ai", "infra"],
     sports: [
       { name: "Tennis", skill: 7 },
       { name: "Running", skill: 8 },
@@ -67,6 +88,8 @@ const mockMatches: Match[] = [
     role: "Trader",
     city: "Singapore",
     mindset: "Competitor",
+    energyStyle: "competitive",
+    cryptoFocus: ["trading", "defi"],
     sports: [
       { name: "Combat", skill: 9 },
       { name: "Gym", skill: 8 },
@@ -101,10 +124,33 @@ const Matchmaking = () => {
   const [currentMatchIndex, setCurrentMatchIndex] = useState(0);
   const [viewMode, setViewMode] = useState<"swipe" | "list">("list");
 
-  const currentMatch = mockMatches[currentMatchIndex];
+  // Calculate match scores for all profiles
+  const rankedMatches = useMemo(() => {
+    return mockMatches.map((match) => {
+      const { score, reasons } = calculateMatchScore(
+        {
+          energyStyle: currentUserProfile.energyStyle,
+          cryptoFocus: currentUserProfile.cryptoFocus,
+          city: currentUserProfile.city,
+          skillLevel: currentUserProfile.skillLevel,
+        },
+        {
+          energyStyle: match.energyStyle,
+          cryptoFocus: match.cryptoFocus,
+          city: match.city,
+          skillLevel: match.sports[0]?.skill || 5,
+        }
+      );
+      return { ...match, matchScore: score, matchReasons: reasons };
+    }).sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0));
+  }, []);
+
+  const topMatch = rankedMatches[0];
+  const otherMatches = rankedMatches.slice(1);
+  const currentMatch = rankedMatches[currentMatchIndex];
 
   const handleNext = () => {
-    setCurrentMatchIndex((prev) => (prev + 1) % mockMatches.length);
+    setCurrentMatchIndex((prev) => (prev + 1) % rankedMatches.length);
   };
 
   return (
@@ -117,9 +163,9 @@ const Matchmaking = () => {
           <div>
             <h1 className="font-display text-xl font-bold text-foreground flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-primary" />
-              Smart Match
+              Smart Matchmaking
             </h1>
-            <p className="text-sm text-muted-foreground">AI-powered partner suggestions</p>
+            <p className="text-sm text-muted-foreground">Energy Style + Crypto Focus alignment</p>
           </div>
           <div className="flex gap-2">
             <Button
@@ -253,11 +299,31 @@ const Matchmaking = () => {
 
         {/* List View */}
         {viewMode === "list" && (
-          <div className="space-y-3">
-            <h2 className="font-display text-lg font-semibold text-foreground">
-              Top Matches Today
-            </h2>
-            {mockMatches.map((match, index) => (
+          <div className="space-y-4">
+            {/* Top Match Highlight */}
+            {topMatch && (
+              <TopMatchCard
+                name={topMatch.name}
+                avatarUrl={undefined}
+                energyStyle={topMatch.energyStyle}
+                cryptoFocus={topMatch.cryptoFocus}
+                city={topMatch.city}
+                matchScore={topMatch.matchScore || 0}
+                matchReasons={topMatch.matchReasons || []}
+                onConnect={() => console.log("Connect with", topMatch.name)}
+              />
+            )}
+
+            {/* Other Matches */}
+            <div className="flex items-center gap-2">
+              <Zap className="w-4 h-4 text-primary" />
+              <h2 className="font-medium text-foreground">Other Matches</h2>
+              <Badge variant="muted" className="text-xs">
+                {otherMatches.length} found
+              </Badge>
+            </div>
+
+            {otherMatches.map((match, index) => (
               <div
                 key={match.id}
                 className="glass-card rounded-xl p-4 card-hover border border-transparent hover:border-border-gold transition-all"
@@ -273,7 +339,7 @@ const Matchmaking = () => {
                       <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-success border-2 border-background" />
                     )}
                     <div className="absolute -top-1 -left-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center text-xs font-bold text-primary-foreground">
-                      {index + 1}
+                      {index + 2}
                     </div>
                   </div>
 
@@ -281,7 +347,7 @@ const Matchmaking = () => {
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-medium text-foreground">{match.name}</h3>
                       <Badge variant="gold" className="text-xs">
-                        {match.compatibility}%
+                        {match.matchScore || match.compatibility}%
                       </Badge>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
@@ -290,21 +356,22 @@ const Matchmaking = () => {
                       <MapPin className="w-3 h-3" />
                       <span>{match.city}</span>
                     </div>
-                    <div className="flex gap-2 mb-2">
-                      {match.sports.map((sport) => (
-                        <div
-                          key={sport.name}
-                          className="flex items-center gap-1 text-xs text-muted-foreground"
-                        >
-                          <span className="text-primary">{getSportIcon(sport.name)}</span>
-                          <span>{sport.skill}</span>
-                        </div>
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      <EnergyBadge energy={match.energyStyle} size="sm" />
+                      {match.cryptoFocus.slice(0, 2).map((focus) => (
+                        <CryptoFocusBadge 
+                          key={focus} 
+                          focus={focus.toLowerCase() as "defi" | "ai" | "infra" | "trading" | "vc" | "founder" | "gaming" | "nft" | "security" | "dao"} 
+                          size="sm" 
+                        />
                       ))}
                     </div>
-                    <p className="text-xs text-muted-foreground italic">
-                      <Sparkles className="w-3 h-3 inline mr-1 text-primary" />
-                      {match.matchReason}
-                    </p>
+                    {match.matchReasons && match.matchReasons.length > 0 && (
+                      <p className="text-xs text-muted-foreground italic">
+                        <Sparkles className="w-3 h-3 inline mr-1 text-primary" />
+                        {match.matchReasons[0]?.text || match.matchReason}
+                      </p>
+                    )}
                   </div>
 
                   <Button variant="gold" size="sm">

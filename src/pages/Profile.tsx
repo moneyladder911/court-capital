@@ -17,8 +17,11 @@ import {
   LogOut,
   Shield,
   Crown,
+  Lock,
 } from "lucide-react";
 import { PadelIcon, TennisIcon, GolfIcon, GymIcon, RunningIcon, CombatIcon } from "@/components/icons/SportIcons";
+import { TrustScoreIndicator } from "@/components/TrustScoreIndicator";
+import { ReputationTierBadge } from "@/components/ReputationTierBadge";
 
 interface UserProfile {
   name: string;
@@ -28,6 +31,8 @@ interface UserProfile {
   mindset: string;
   isVerified: boolean;
   isVIP: boolean;
+  trustScore: number;
+  reputationTier: "member" | "pioneer" | "catalyst";
   stats: {
     sessionsAttended: number;
     connectionsCount: number;
@@ -45,6 +50,13 @@ interface UserProfile {
     icon: string;
     name: string;
     description: string;
+    isSoulbound?: boolean;
+  }[];
+  soulboundBadges: {
+    icon: string;
+    name: string;
+    description: string;
+    earned: boolean;
   }[];
 }
 
@@ -56,6 +68,8 @@ const mockProfile: UserProfile = {
   mindset: "Builder",
   isVerified: true,
   isVIP: true,
+  trustScore: 78,
+  reputationTier: "pioneer",
   stats: {
     sessionsAttended: 45,
     connectionsCount: 128,
@@ -78,6 +92,11 @@ const mockProfile: UserProfile = {
     { icon: "💎", name: "Founder Circle", description: "Connected with 10 founders" },
     { icon: "⭐", name: "Reliable Networker", description: "90%+ reliability" },
     { icon: "🎯", name: "First Session", description: "Attended first session" },
+  ],
+  soulboundBadges: [
+    { icon: "🌅", name: "Early Bird", description: "First 100 members or attended sessions before 7 AM", earned: true },
+    { icon: "🤝", name: "Deal Maker", description: "Hosted 5+ sessions", earned: true },
+    { icon: "💡", name: "Alpha Sharer", description: "Shared 10+ public lessons", earned: false },
   ],
 };
 
@@ -137,6 +156,7 @@ const Profile = () => {
           <div className="flex items-center justify-center gap-2 mb-3">
             <Badge variant="gold">{mockProfile.role}</Badge>
             <Badge variant="role">{mockProfile.mindset}</Badge>
+            <ReputationTierBadge tier={mockProfile.reputationTier} size="sm" />
           </div>
 
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-4">
@@ -155,6 +175,19 @@ const Profile = () => {
               <Settings className="w-4 h-4 mr-1" />
               Settings
             </Button>
+          </div>
+        </div>
+
+        {/* Trust Score Card */}
+        <div className="glass-card rounded-xl p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-medium text-foreground mb-1">Trust Score</h3>
+              <p className="text-xs text-muted-foreground">
+                Based on attendance, hosting, and community contribution
+              </p>
+            </div>
+            <TrustScoreIndicator score={mockProfile.trustScore} size="lg" showLabel={false} />
           </div>
         </div>
 
@@ -282,6 +315,33 @@ const Profile = () => {
                   <div className="text-xs font-medium text-foreground truncate">{badge.name}</div>
                 </div>
               ))}
+            </div>
+
+            {/* Soulbound Badges Section */}
+            <div className="mt-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Lock className="w-4 h-4 text-primary" />
+                <h4 className="font-medium text-foreground">Soulbound Badges</h4>
+                <Badge variant="muted" className="text-xs">Non-transferable</Badge>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                {mockProfile.soulboundBadges.map((badge, index) => (
+                  <div
+                    key={index}
+                    className={`glass-card rounded-xl p-3 text-center border transition-colors ${
+                      badge.earned 
+                        ? "border-primary/50 bg-primary/5" 
+                        : "border-border opacity-50"
+                    }`}
+                  >
+                    <div className="text-2xl mb-1">{badge.icon}</div>
+                    <div className="text-xs font-medium text-foreground truncate">{badge.name}</div>
+                    {!badge.earned && (
+                      <div className="text-[10px] text-muted-foreground mt-1">Locked</div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}

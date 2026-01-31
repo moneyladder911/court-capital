@@ -13,6 +13,7 @@ import {
   Users,
   Zap,
   Check,
+  Target,
 } from "lucide-react";
 import { PadelIcon, TennisIcon, GolfIcon, GymIcon, RunningIcon, CombatIcon, YogaIcon, PilatesIcon } from "@/components/icons/SportIcons";
 
@@ -30,6 +31,9 @@ const sports = [
 const skillLevels = ["Beginner", "Intermediate", "Advanced", "Pro"];
 const cryptoFocusOptions = ["Casual", "Networking", "Founders Only", "Investors Welcome"];
 
+import { SessionIntent } from "@/components/SessionIntentBadge";
+import { SessionIntentSelector } from "@/components/SessionIntentSelector";
+
 const CreateSession = () => {
   const navigate = useNavigate();
   const [selectedSport, setSelectedSport] = useState<string | null>(null);
@@ -40,6 +44,7 @@ const CreateSession = () => {
   const [maxParticipants, setMaxParticipants] = useState("4");
   const [skillLevel, setSkillLevel] = useState("Intermediate");
   const [cryptoFocus, setCryptoFocus] = useState<string | null>(null);
+  const [sessionIntent, setSessionIntent] = useState<SessionIntent[]>([]);
   const [description, setDescription] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -54,6 +59,7 @@ const CreateSession = () => {
       maxParticipants,
       skillLevel,
       cryptoFocus,
+      sessionIntent,
       description,
     });
     navigate("/");
@@ -239,6 +245,21 @@ const CreateSession = () => {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Session Intent */}
+          <div className="space-y-3">
+            <Label className="text-foreground flex items-center gap-2">
+              <Target className="w-4 h-4 text-primary" />
+              Session Intent (Optional)
+            </Label>
+            <p className="text-xs text-muted-foreground">
+              Help others find sessions that match their goals
+            </p>
+            <SessionIntentSelector
+              selected={sessionIntent}
+              onChange={setSessionIntent}
+            />
           </div>
 
           {/* Description */}
