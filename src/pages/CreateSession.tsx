@@ -1,123 +1,149 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
+import { BottomNav } from "@/components/BottomNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { SessionIntentSelector } from "@/components/SessionIntentSelector";
+import { SessionIntent } from "@/components/SessionIntentBadge";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import {
   ArrowLeft,
   MapPin,
   Calendar,
   Clock,
   Users,
-  Zap,
-  Check,
-  Target,
+  Dumbbell,
 } from "lucide-react";
 import { PadelIcon, TennisIcon, GolfIcon, GymIcon, RunningIcon, CombatIcon, YogaIcon, PilatesIcon } from "@/components/icons/SportIcons";
 
-const sports = [
-  { id: "padel", name: "Padel", icon: PadelIcon },
-  { id: "tennis", name: "Tennis", icon: TennisIcon },
-  { id: "golf", name: "Golf", icon: GolfIcon },
-  { id: "gym", name: "Gym", icon: GymIcon },
-  { id: "running", name: "Running", icon: RunningIcon },
-  { id: "combat", name: "Combat", icon: CombatIcon },
-  { id: "yoga", name: "Yoga", icon: YogaIcon },
-  { id: "pilates", name: "Pilates", icon: PilatesIcon },
+const sportOptions = [
+  { id: "padel", label: "Padel", icon: PadelIcon },
+  { id: "tennis", label: "Tennis", icon: TennisIcon },
+  { id: "golf", label: "Golf", icon: GolfIcon },
+  { id: "gym", label: "Gym", icon: GymIcon },
+  { id: "running", label: "Running", icon: RunningIcon },
+  { id: "combat", label: "Combat", icon: CombatIcon },
+  { id: "yoga", label: "Yoga", icon: YogaIcon },
+  { id: "pilates", label: "Pilates", icon: PilatesIcon },
 ];
 
-const skillLevels = ["Beginner", "Intermediate", "Advanced", "Pro"];
-const cryptoFocusOptions = ["Casual", "Networking", "Founders Only", "Investors Welcome"];
+const skillLevels = ["beginner", "intermediate", "advanced", "all_levels"];
 
-import { SessionIntent } from "@/components/SessionIntentBadge";
-import { SessionIntentSelector } from "@/components/SessionIntentSelector";
-
-const CreateSession = () => {
+export const CreateSession: React.FC = () => {
   const navigate = useNavigate();
-  const [selectedSport, setSelectedSport] = useState<string | null>(null);
+  const { toast } = useToast();
+  const { user, isAuthenticated } = useAuth();
+
+  const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
+  const [sport, setSport] = useState("");
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [maxParticipants, setMaxParticipants] = useState("4");
-  const [skillLevel, setSkillLevel] = useState("Intermediate");
-  const [cryptoFocus, setCryptoFocus] = useState<string | null>(null);
+  const [skillLevel, setSkillLevel] = useState("all_levels");
+  const [cryptoFocus, setCryptoFocus] = useState("");
   const [sessionIntent, setSessionIntent] = useState<SessionIntent[]>([]);
   const [description, setDescription] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Submit to backend
-    console.log({
-      sport: selectedSport,
-      title,
-      location,
-      date,
-      time,
-      maxParticipants,
-      skillLevel,
-      cryptoFocus,
-      sessionIntent,
-      description,
-    });
-    navigate("/");
+
+    if (!isAuthenticated || !user) {
+      toast({
+        title: "Please sign in",
+        description: "You need to be signed in to create a session.",
+        variant: "destructive",
+      });
+      navigate("/auth");
+      return;
+    }
+
+    if (!sport || !title || !location || !date || !time) {
+      toast({
+        title: "Missing fields",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const scheduledAt = new Date(`${date}T${time}`).toISOString();
+
+      const { error } = await supabase.from("sessions").insert({
+        host_id: user.id,
+        title,
+        sport,
+        location,
+        scheduled_at: scheduledAt,
+        max_participants: parseInt(maxParticipants),
+        skill_level: skillLevel,
+        crypto_focus: cryptoFocus || null,
+        session_intent: sessionIntent,
+        description: description || null,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Session created!",
+        description: "Your session has been created successfully.",
+      });
+
+      navigate("/");
+    } catch (error) {
+      console.error("Error creating session:", error);
+      toast({
+        title: "Error",
+        description: "Failed to create session. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-background pb-8">
-      <Header />
-
-      <main className="max-w-md mx-auto px-4 py-4 space-y-6">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="text-sm">Back</span>
-        </button>
-
-        <div>
-          <h1 className="font-display text-2xl font-bold text-foreground mb-1">
-            Create Session
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            Host a training session and connect with elite players
-          </p>
+    <div className="min-h-screen bg-background">
+      <header className="sticky top-0 z-40 glass-card border-b border-border">
+        <div className="max-w-md mx-auto px-4 py-3 flex items-center gap-3">
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+          <h1 className="font-display text-lg font-bold">Create Session</h1>
         </div>
+      </header>
 
+      <main className="max-w-md mx-auto px-4 pb-32 pt-4">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Sport Selection */}
           <div className="space-y-3">
-            <Label className="text-foreground">Sport *</Label>
-            <div className="grid grid-cols-3 gap-2">
-              {sports.map((sport) => {
-                const Icon = sport.icon;
+            <Label>Sport *</Label>
+            <div className="grid grid-cols-4 gap-2">
+              {sportOptions.map((option) => {
+                const Icon = option.icon;
+                const isSelected = sport === option.id;
                 return (
                   <button
-                    key={sport.id}
+                    key={option.id}
                     type="button"
-                    onClick={() => setSelectedSport(sport.id)}
-                    className={`glass-card rounded-xl p-4 flex flex-col items-center gap-2 transition-all ${
-                      selectedSport === sport.id
-                        ? "border-2 border-primary bg-primary/10"
-                        : "border border-border hover:border-border-gold"
+                    onClick={() => setSport(option.id)}
+                    className={`flex flex-col items-center gap-1 p-3 rounded-xl transition-all ${
+                      isSelected
+                        ? "bg-primary text-primary-foreground"
+                        : "glass-card text-muted-foreground hover:text-foreground"
                     }`}
                   >
-                    <Icon
-                      className={`w-6 h-6 ${
-                        selectedSport === sport.id ? "text-primary" : "text-muted-foreground"
-                      }`}
-                    />
-                    <span
-                      className={`text-sm font-medium ${
-                        selectedSport === sport.id ? "text-primary" : "text-foreground"
-                      }`}
-                    >
-                      {sport.name}
-                    </span>
+                    <Icon className="w-6 h-6" />
+                    <span className="text-xs">{option.label}</span>
                   </button>
                 );
               })}
@@ -126,28 +152,27 @@ const CreateSession = () => {
 
           {/* Title */}
           <div className="space-y-2">
-            <Label htmlFor="title" className="text-foreground">Session Title *</Label>
+            <Label htmlFor="title">Session Title *</Label>
             <Input
               id="title"
+              placeholder="e.g., Morning Padel - DeFi Founders"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g., Morning Padel Match"
-              className="bg-card border-border"
               required
             />
           </div>
 
           {/* Location */}
           <div className="space-y-2">
-            <Label htmlFor="location" className="text-foreground">Location *</Label>
+            <Label htmlFor="location">Location *</Label>
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 id="location"
+                placeholder="e.g., Dubai Marina Courts"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                placeholder="Club name or address"
-                className="pl-10 bg-card border-border"
+                className="pl-10"
                 required
               />
             </div>
@@ -156,7 +181,7 @@ const CreateSession = () => {
           {/* Date & Time */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="date" className="text-foreground">Date *</Label>
+              <Label htmlFor="date">Date *</Label>
               <div className="relative">
                 <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -164,13 +189,13 @@ const CreateSession = () => {
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="pl-10 bg-card border-border"
+                  className="pl-10"
                   required
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="time" className="text-foreground">Time *</Label>
+              <Label htmlFor="time">Time *</Label>
               <div className="relative">
                 <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -178,70 +203,46 @@ const CreateSession = () => {
                   type="time"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
-                  className="pl-10 bg-card border-border"
+                  className="pl-10"
                   required
                 />
               </div>
             </div>
           </div>
 
-          {/* Participants */}
+          {/* Max Participants */}
           <div className="space-y-2">
-            <Label htmlFor="participants" className="text-foreground">Max Participants</Label>
+            <Label htmlFor="maxParticipants">Max Participants</Label>
             <div className="relative">
               <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                id="participants"
+                id="maxParticipants"
                 type="number"
                 min="2"
                 max="20"
                 value={maxParticipants}
                 onChange={(e) => setMaxParticipants(e.target.value)}
-                className="pl-10 bg-card border-border"
+                className="pl-10"
               />
             </div>
           </div>
 
           {/* Skill Level */}
           <div className="space-y-3">
-            <Label className="text-foreground">Skill Level</Label>
+            <Label>Skill Level</Label>
             <div className="flex flex-wrap gap-2">
               {skillLevels.map((level) => (
                 <button
                   key={level}
                   type="button"
                   onClick={() => setSkillLevel(level)}
-                  className={`py-2 px-4 rounded-lg text-sm font-medium transition-all ${
+                  className={`px-4 py-2 rounded-full text-sm transition-all ${
                     skillLevel === level
                       ? "bg-primary text-primary-foreground"
                       : "glass-card text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {level}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Crypto Focus */}
-          <div className="space-y-3">
-            <Label className="text-foreground flex items-center gap-2">
-              <Zap className="w-4 h-4 text-primary" />
-              Crypto Focus (Optional)
-            </Label>
-            <div className="flex flex-wrap gap-2">
-              {cryptoFocusOptions.map((option) => (
-                <button
-                  key={option}
-                  type="button"
-                  onClick={() => setCryptoFocus(cryptoFocus === option ? null : option)}
-                  className={`py-2 px-4 rounded-lg text-sm font-medium transition-all ${
-                    cryptoFocus === option
-                      ? "bg-gradient-gold text-primary-foreground"
-                      : "glass-card text-muted-foreground hover:text-foreground border border-border"
-                  }`}
-                >
-                  {option}
+                  {level.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase())}
                 </button>
               ))}
             </div>
@@ -249,12 +250,9 @@ const CreateSession = () => {
 
           {/* Session Intent */}
           <div className="space-y-3">
-            <Label className="text-foreground flex items-center gap-2">
-              <Target className="w-4 h-4 text-primary" />
-              Session Intent (Optional)
-            </Label>
+            <Label>Session Intent (Optional)</Label>
             <p className="text-xs text-muted-foreground">
-              Help others find sessions that match their goals
+              Help others know what kind of networking you're open to
             </p>
             <SessionIntentSelector
               selected={sessionIntent}
@@ -262,16 +260,26 @@ const CreateSession = () => {
             />
           </div>
 
+          {/* Crypto Focus */}
+          <div className="space-y-2">
+            <Label htmlFor="cryptoFocus">Crypto Focus (Optional)</Label>
+            <Input
+              id="cryptoFocus"
+              placeholder="e.g., DeFi, NFTs, L2s..."
+              value={cryptoFocus}
+              onChange={(e) => setCryptoFocus(e.target.value)}
+            />
+          </div>
+
           {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-foreground">Description (Optional)</Label>
+            <Label htmlFor="description">Description (Optional)</Label>
             <textarea
               id="description"
+              placeholder="Add any additional details about your session..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Add any details about the session..."
-              rows={3}
-              className="w-full rounded-lg bg-card border border-border px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+              className="w-full min-h-[100px] px-3 py-2 rounded-md border border-input bg-background text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
           </div>
 
@@ -279,15 +287,15 @@ const CreateSession = () => {
           <Button
             type="submit"
             variant="gold"
-            size="xl"
             className="w-full"
-            disabled={!selectedSport || !title || !location || !date || !time}
+            disabled={loading}
           >
-            <Check className="w-5 h-5 mr-2" />
-            Create Session
+            {loading ? "Creating..." : "Create Session"}
           </Button>
         </form>
       </main>
+
+      <BottomNav />
     </div>
   );
 };

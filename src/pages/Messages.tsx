@@ -1,257 +1,171 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { Header } from "@/components/Header";
 import { BottomNav } from "@/components/BottomNav";
 import { ChatView } from "@/components/ChatView";
-import { Badge } from "@/components/ui/badge";
+import { useConversations } from "@/hooks/useConversations";
+import { useAuth } from "@/hooks/useAuth";
+import { MessageCircle, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, MessageCircle, Users, Bell, BellOff } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
-import { useConversations, ConversationWithDetails } from "@/hooks/useConversations";
-import { useNotifications } from "@/hooks/useNotifications";
 import { formatDistanceToNow } from "date-fns";
 
-const Messages = () => {
-  const navigate = useNavigate();
+export const Messages: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
   const { conversations, loading } = useConversations(user?.id);
-  const { isSupported, permission, requestPermission } = useNotifications();
-  const [activeTab, setActiveTab] = useState("messages");
-  const [searchQuery, setSearchQuery] = useState("");
   const [selectedConversation, setSelectedConversation] = useState<{
     id: string;
     otherUserName: string;
-    otherUserAvatar?: string | null;
-    isOnline?: boolean;
+    otherUserAvatar: string | null;
+    isOnline: boolean;
   } | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // Filter conversations based on search
-  const filteredConversations = conversations.filter((conv) => {
-    const otherParticipant = conv.participants.find((p) => p.user_id !== user?.id);
-    const name = otherParticipant?.profile?.name || "Unknown";
-    return name.toLowerCase().includes(searchQuery.toLowerCase());
-  });
-
-  const getConversationDisplay = (conv: ConversationWithDetails) => {
-    const otherParticipant = conv.participants.find((p) => p.user_id !== user?.id);
-    const name = otherParticipant?.profile?.name || "Unknown User";
-    const avatar = otherParticipant?.profile?.avatar_url;
-    const isOnline = otherParticipant?.profile?.is_online || false;
-
-    return { name, avatar, isOnline };
-  };
-
-  const formatTime = (dateStr: string) => {
-    try {
-      return formatDistanceToNow(new Date(dateStr), { addSuffix: false })
-        .replace("about ", "")
-        .replace(" minutes", "m")
-        .replace(" minute", "m")
-        .replace(" hours", "h")
-        .replace(" hour", "h")
-        .replace(" days", "d")
-        .replace(" day", "d")
-        .replace("less than a minute", "now");
-    } catch {
-      return "";
-    }
-  };
-
-  const handleConversationClick = (conv: ConversationWithDetails) => {
-    const display = getConversationDisplay(conv);
-    setSelectedConversation({
-      id: conv.id,
-      otherUserName: display.name,
-      otherUserAvatar: display.avatar,
-      isOnline: display.isOnline,
-    });
-  };
-
-  // Show login prompt if not authenticated
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-background pb-20">
+      <div className="min-h-screen bg-background">
         <Header />
-        <main className="max-w-md mx-auto px-4 py-12 text-center">
-          <MessageCircle className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Sign in to message</h2>
-          <p className="text-muted-foreground mb-6">
-            Connect with other players and start conversations
-          </p>
-          <Button variant="gold" onClick={() => navigate("/auth")}>
-            Sign In
-          </Button>
+        <main className="max-w-md mx-auto px-4 pb-32 pt-4">
+          <div className="glass-card rounded-xl p-8 text-center">
+            <MessageCircle className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+            <h2 className="font-display text-xl font-bold mb-4">Messages</h2>
+            <p className="text-muted-foreground mb-6">
+              Sign in to view your messages and connect with other members.
+            </p>
+            <Button variant="gold" onClick={() => window.location.href = "/auth"}>
+              Sign In
+            </Button>
+          </div>
         </main>
         <BottomNav />
       </div>
     );
   }
 
-  // Show chat view if conversation is selected
-  if (selectedConversation && user) {
+  if (selectedConversation) {
     return (
-      <div className="min-h-screen bg-background pb-20">
-        <Header />
-        <main className="max-w-md mx-auto px-4 py-4">
+      <div className="min-h-screen bg-background">
+        <main className="max-w-md mx-auto px-4 pb-4 pt-4">
           <ChatView
             conversationId={selectedConversation.id}
-            userId={user.id}
+            userId={user!.id}
             otherUserName={selectedConversation.otherUserName}
             otherUserAvatar={selectedConversation.otherUserAvatar}
             isOnline={selectedConversation.isOnline}
             onBack={() => setSelectedConversation(null)}
           />
         </main>
-        <BottomNav />
       </div>
     );
   }
 
-  return (
-    <div className="min-h-screen bg-background pb-20">
-      <Header />
+  const filteredConversations = conversations.filter((conv) => {
+    if (!searchQuery) return true;
+    const otherParticipant = conv.participants.find((p) => p.user_id !== user?.id);
+    return otherParticipant?.profile?.name?.toLowerCase().includes(searchQuery.toLowerCase());
+  });
 
-      <main className="max-w-md mx-auto px-4 py-4 space-y-4">
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      
+      <main className="max-w-md mx-auto px-4 pb-32 pt-4">
+        {/* Header */}
+        <div className="flex items-center gap-2 mb-6">
+          <MessageCircle className="w-6 h-6 text-primary" />
+          <h1 className="font-display text-2xl font-bold">Messages</h1>
+        </div>
+
         {/* Search */}
-        <div className="relative">
+        <div className="relative mb-6">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
+            placeholder="Search conversations..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search conversations..."
-            className="pl-10 bg-card border-border"
+            className="pl-10"
           />
         </div>
 
-        {/* Notification Permission Banner */}
-        {isSupported && permission === "default" && (
-          <div className="glass-card rounded-xl p-3 flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <Bell className="w-4 h-4 text-primary" />
-              <span className="text-sm text-muted-foreground">
-                Enable notifications for new messages
-              </span>
-            </div>
-            <Button size="sm" variant="gold" onClick={requestPermission}>
-              Enable
-            </Button>
-          </div>
-        )}
-        
-        {isSupported && permission === "denied" && (
-          <div className="glass-card rounded-xl p-3 flex items-center gap-2 opacity-60">
-            <BellOff className="w-4 h-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">
-              Notifications blocked - enable in browser settings
-            </span>
-          </div>
-        )}
-
-        {/* Tabs */}
-        <div className="flex gap-2">
-          <button
-            className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all ${
-              activeTab === "messages"
-                ? "bg-primary text-primary-foreground"
-                : "glass-card text-muted-foreground"
-            }`}
-            onClick={() => setActiveTab("messages")}
-          >
-            <MessageCircle className="w-4 h-4 inline mr-2" />
-            Direct
-          </button>
-          <button
-            className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all ${
-              activeTab === "groups"
-                ? "bg-primary text-primary-foreground"
-                : "glass-card text-muted-foreground"
-            }`}
-            onClick={() => setActiveTab("groups")}
-          >
-            <Users className="w-4 h-4 inline mr-2" />
-            Groups
-          </button>
-        </div>
-
-        {/* Loading State */}
+        {/* Conversations List */}
         {loading ? (
-          <div className="flex justify-center py-12">
+          <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
           </div>
+        ) : filteredConversations.length === 0 ? (
+          <div className="text-center py-12">
+            <MessageCircle className="w-12 h-12 mx-auto mb-4 text-muted-foreground/50" />
+            <p className="text-muted-foreground">No conversations yet</p>
+            <p className="text-sm text-muted-foreground/70 mt-2">
+              Connect with members to start chatting
+            </p>
+          </div>
         ) : (
-          <>
-            {/* Conversations List */}
-            <div className="space-y-2">
-              {filteredConversations.map((conv) => {
-                const display = getConversationDisplay(conv);
-                return (
-                  <div
-                    key={conv.id}
-                    className="glass-card rounded-xl p-4 card-hover cursor-pointer"
-                    onClick={() => handleConversationClick(conv)}
-                  >
-                    <div className="flex items-center gap-3">
-                      {/* Avatar */}
-                      <div className="relative">
-                        <div className="w-12 h-12 rounded-full bg-gradient-card border border-border flex items-center justify-center overflow-hidden">
-                          {display.avatar ? (
-                            <img
-                              src={display.avatar}
-                              alt={display.name}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <span className="text-lg font-bold text-primary">
-                              {display.name.charAt(0)}
-                            </span>
-                          )}
-                        </div>
-                        {display.isOnline && (
-                          <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-success border-2 border-background" />
-                        )}
-                      </div>
+          <div className="space-y-2">
+            {filteredConversations.map((conv) => {
+              const otherParticipant = conv.participants.find((p) => p.user_id !== user?.id);
+              const profile = otherParticipant?.profile;
 
-                      {/* Content */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-0.5">
-                          <h3 className="font-medium text-foreground truncate">
-                            {display.name}
-                          </h3>
-                          {conv.last_message && (
-                            <span className="text-xs text-muted-foreground">
-                              {formatTime(conv.last_message.created_at)}
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-sm text-muted-foreground truncate">
-                          {conv.last_message?.content || "No messages yet"}
-                        </p>
-                      </div>
-
-                      {/* Unread Badge */}
-                      {conv.unread_count > 0 && (
-                        <Badge variant="gold" className="text-xs min-w-[20px] justify-center">
-                          {conv.unread_count}
-                        </Badge>
+              return (
+                <button
+                  key={conv.id}
+                  onClick={() =>
+                    setSelectedConversation({
+                      id: conv.id,
+                      otherUserName: profile?.name || "Unknown",
+                      otherUserAvatar: profile?.avatar_url || null,
+                      isOnline: profile?.is_online || false,
+                    })
+                  }
+                  className="w-full glass-card rounded-xl p-4 flex items-center gap-3 text-left hover:border-primary/30 transition-colors"
+                >
+                  <div className="relative">
+                    <div className="w-12 h-12 rounded-full bg-gradient-card border border-border flex items-center justify-center">
+                      {profile?.avatar_url ? (
+                        <img
+                          src={profile.avatar_url}
+                          alt={profile.name}
+                          className="w-full h-full rounded-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-lg font-bold text-primary">
+                          {profile?.name?.charAt(0) || "?"}
+                        </span>
                       )}
                     </div>
+                    {profile?.is_online && (
+                      <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-success border-2 border-background" />
+                    )}
                   </div>
-                );
-              })}
-            </div>
 
-            {/* Empty State */}
-            {filteredConversations.length === 0 && (
-              <div className="text-center py-12">
-                <MessageCircle className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
-                <p className="text-muted-foreground mb-4">No conversations yet</p>
-                <p className="text-sm text-muted-foreground">
-                  Connect with other players to start messaging
-                </p>
-              </div>
-            )}
-          </>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-medium text-foreground truncate">
+                        {profile?.name || "Unknown"}
+                      </span>
+                      {conv.last_message && (
+                        <span className="text-xs text-muted-foreground">
+                          {formatDistanceToNow(new Date(conv.last_message.created_at), {
+                            addSuffix: false,
+                          })}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-muted-foreground truncate">
+                      {conv.last_message?.content || "No messages yet"}
+                    </p>
+                  </div>
+
+                  {conv.unread_count > 0 && (
+                    <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                      <span className="text-xs font-bold text-primary-foreground">
+                        {conv.unread_count}
+                      </span>
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
         )}
       </main>
 

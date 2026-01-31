@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Zap, Mail, Lock, User, ArrowRight } from "lucide-react";
+import { ArrowLeft, Mail, Lock, User } from "lucide-react";
 
-const Auth = () => {
+export const Auth: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,22 +15,6 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
-
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.user) {
-        navigate("/");
-      }
-    });
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        navigate("/");
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,41 +26,37 @@ const Auth = () => {
           email,
           password,
         });
+
         if (error) throw error;
-        toast({ title: "Welcome back!", description: "Successfully logged in." });
+
+        toast({
+          title: "Welcome back!",
+          description: "You have successfully signed in.",
+        });
+        navigate("/");
       } else {
-        const redirectUrl = `${window.location.origin}/`;
-        const { data, error } = await supabase.auth.signUp({
+        const { error } = await supabase.auth.signUp({
           email,
           password,
           options: {
-            emailRedirectTo: redirectUrl,
-            data: { name },
+            data: {
+              name,
+            },
           },
         });
+
         if (error) throw error;
 
-        // Create profile after signup
-        if (data.user) {
-          const profileData = {
-            user_id: data.user.id,
-            name: name || email.split("@")[0],
-          };
-          const pointsData = {
-            user_id: data.user.id,
-          };
-          // Types will regenerate after migration syncs
-          await (supabase.from("profiles") as any).insert(profileData);
-          await (supabase.from("user_points") as any).insert(pointsData);
-        }
-
-        toast({ title: "Account created!", description: "Welcome to CHAINPLAY." });
+        toast({
+          title: "Account created!",
+          description: "Please check your email to verify your account.",
+        });
       }
-    } catch (error: any) {
-      console.error("Auth error:", error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "An error occurred";
       toast({
         title: "Error",
-        description: error.message || "An error occurred",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -87,76 +67,79 @@ const Auth = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
-      <div className="p-6 text-center">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-gradient-gold flex items-center justify-center">
-            <Zap className="w-6 h-6 text-background" />
-          </div>
-          <span className="font-display text-2xl font-bold text-gradient-gold">CHAINPLAY</span>
-        </div>
-        <p className="text-muted-foreground text-sm">Where Crypto Meets Competition</p>
-      </div>
+      <header className="p-4">
+        <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
+          <ArrowLeft className="w-5 h-5" />
+        </Button>
+      </header>
 
-      {/* Form */}
-      <div className="flex-1 flex items-center justify-center px-6 pb-12">
+      <main className="flex-1 flex flex-col items-center justify-center px-4">
         <div className="w-full max-w-sm">
-          <div className="glass-card rounded-2xl p-6 space-y-6">
-            <div className="text-center">
-              <h1 className="font-display text-2xl font-bold text-foreground mb-1">
-                {isLogin ? "Welcome Back" : "Join the Network"}
-              </h1>
-              <p className="text-muted-foreground text-sm">
-                {isLogin ? "Sign in to your account" : "Create your elite profile"}
-              </p>
-            </div>
+          {/* Logo */}
+          <div className="text-center mb-8">
+            <h1 className="font-display text-3xl font-bold">
+              <span className="gold-text">CHAIN</span>
+              <span className="text-foreground">PLAY</span>
+            </h1>
+            <p className="text-sm text-muted-foreground mt-2">
+              Build Deals. Build Bodies.
+            </p>
+          </div>
+
+          {/* Auth Form */}
+          <div className="glass-card rounded-xl p-6">
+            <h2 className="font-display text-xl font-semibold text-center mb-6">
+              {isLogin ? "Welcome Back" : "Join CHAINPLAY"}
+            </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {!isLogin && (
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-muted-foreground">Name</Label>
+                  <Label htmlFor="name">Full Name</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input
                       id="name"
                       type="text"
+                      placeholder="John Doe"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="Your name"
-                      className="pl-10 bg-card border-border"
+                      className="pl-10"
+                      required={!isLogin}
                     />
                   </div>
                 </div>
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-muted-foreground">Email</Label>
+                <Label htmlFor="email">Email</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
+                    placeholder="you@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
+                    className="pl-10"
                     required
-                    className="pl-10 bg-card border-border"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-muted-foreground">Password</Label>
+                <Label htmlFor="password">Password</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     id="password"
                     type="password"
+                    placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
+                    className="pl-10"
                     required
                     minLength={6}
-                    className="pl-10 bg-card border-border"
                   />
                 </div>
               </div>
@@ -164,30 +147,50 @@ const Auth = () => {
               <Button
                 type="submit"
                 variant="gold"
-                size="lg"
                 className="w-full"
                 disabled={loading}
               >
                 {loading ? "Loading..." : isLogin ? "Sign In" : "Create Account"}
-                <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </form>
 
-            <div className="text-center">
+            <div className="mt-6 text-center">
               <button
                 type="button"
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                className="text-sm text-primary hover:underline"
               >
-                {isLogin ? "Don't have an account? " : "Already have an account? "}
-                <span className="text-primary font-medium">
-                  {isLogin ? "Sign up" : "Sign in"}
-                </span>
+                {isLogin
+                  ? "Don't have an account? Sign up"
+                  : "Already have an account? Sign in"}
               </button>
             </div>
           </div>
+
+          {/* Social Auth */}
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-border" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-4">
+              <Button variant="outline" disabled>
+                Google
+              </Button>
+              <Button variant="outline" disabled>
+                Wallet
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };

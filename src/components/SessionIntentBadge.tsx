@@ -19,7 +19,7 @@ const intentConfig: Record<SessionIntent, { label: string; icon: React.Component
   hiring: {
     label: "#Hiring",
     icon: Users,
-    color: "bg-info/20 text-info border-info/30",
+    color: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   },
   alpha_only: {
     label: "#AlphaOnly",
