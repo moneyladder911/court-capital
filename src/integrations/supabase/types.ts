@@ -407,7 +407,11 @@ export type Database = {
           mindset: Database["public"]["Enums"]["mindset_tag"] | null
           name: string
           no_shows: number | null
+          reputation_tier:
+            | Database["public"]["Enums"]["reputation_tier_type"]
+            | null
           sessions_as_host: number | null
+          trust_score: number | null
           updated_at: string | null
           user_id: string
         }
@@ -434,7 +438,11 @@ export type Database = {
           mindset?: Database["public"]["Enums"]["mindset_tag"] | null
           name: string
           no_shows?: number | null
+          reputation_tier?:
+            | Database["public"]["Enums"]["reputation_tier_type"]
+            | null
           sessions_as_host?: number | null
+          trust_score?: number | null
           updated_at?: string | null
           user_id: string
         }
@@ -461,7 +469,11 @@ export type Database = {
           mindset?: Database["public"]["Enums"]["mindset_tag"] | null
           name?: string
           no_shows?: number | null
+          reputation_tier?:
+            | Database["public"]["Enums"]["reputation_tier_type"]
+            | null
           sessions_as_host?: number | null
+          trust_score?: number | null
           updated_at?: string | null
           user_id?: string
         }
@@ -506,6 +518,7 @@ export type Database = {
           post_mood: string | null
           reflection_text: string | null
           session_id: string | null
+          sport_tag: Database["public"]["Enums"]["sport_type"] | null
           updated_at: string | null
           upvotes_count: number | null
           user_id: string
@@ -519,6 +532,7 @@ export type Database = {
           post_mood?: string | null
           reflection_text?: string | null
           session_id?: string | null
+          sport_tag?: Database["public"]["Enums"]["sport_type"] | null
           updated_at?: string | null
           upvotes_count?: number | null
           user_id: string
@@ -532,6 +546,7 @@ export type Database = {
           post_mood?: string | null
           reflection_text?: string | null
           session_id?: string | null
+          sport_tag?: Database["public"]["Enums"]["sport_type"] | null
           updated_at?: string | null
           upvotes_count?: number | null
           user_id?: string
@@ -560,6 +575,7 @@ export type Database = {
           longitude: number | null
           max_participants: number | null
           scheduled_at: string
+          session_intent: string[] | null
           skill_level: Database["public"]["Enums"]["skill_level"] | null
           sport: Database["public"]["Enums"]["sport_type"]
           title: string
@@ -577,6 +593,7 @@ export type Database = {
           longitude?: number | null
           max_participants?: number | null
           scheduled_at: string
+          session_intent?: string[] | null
           skill_level?: Database["public"]["Enums"]["skill_level"] | null
           sport: Database["public"]["Enums"]["sport_type"]
           title: string
@@ -594,6 +611,7 @@ export type Database = {
           longitude?: number | null
           max_participants?: number | null
           scheduled_at?: string
+          session_intent?: string[] | null
           skill_level?: Database["public"]["Enums"]["skill_level"] | null
           sport?: Database["public"]["Enums"]["sport_type"]
           title?: string
@@ -710,6 +728,23 @@ export type Database = {
         }
         Returns: Database["public"]["Enums"]["member_tier"]
       }
+      calculate_trust_score: {
+        Args: {
+          p_attendance_rate: number
+          p_feedback_score: number
+          p_lessons_shared: number
+          p_sessions_hosted: number
+        }
+        Returns: number
+      }
+      get_reputation_tier: {
+        Args: {
+          p_is_trusted: boolean
+          p_sessions_hosted: number
+          p_trust_score: number
+        }
+        Returns: Database["public"]["Enums"]["reputation_tier_type"]
+      }
     }
     Enums: {
       availability_pattern:
@@ -725,6 +760,7 @@ export type Database = {
       event_type: "tournament" | "meetup" | "retreat" | "camp" | "casual"
       member_tier: "explorer" | "core" | "elite" | "inner_circle"
       mindset_tag: "builder" | "competitor" | "strategist" | "investor"
+      reputation_tier_type: "member" | "pioneer" | "catalyst"
       skill_level: "beginner" | "intermediate" | "advanced" | "pro"
       sport_type:
         | "padel"
@@ -876,6 +912,7 @@ export const Constants = {
       event_type: ["tournament", "meetup", "retreat", "camp", "casual"],
       member_tier: ["explorer", "core", "elite", "inner_circle"],
       mindset_tag: ["builder", "competitor", "strategist", "investor"],
+      reputation_tier_type: ["member", "pioneer", "catalyst"],
       skill_level: ["beginner", "intermediate", "advanced", "pro"],
       sport_type: [
         "padel",

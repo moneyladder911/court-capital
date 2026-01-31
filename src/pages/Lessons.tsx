@@ -2,8 +2,21 @@ import React, { useState } from "react";
 import { Header } from "@/components/Header";
 import { BottomNav } from "@/components/BottomNav";
 import { LessonsFeed, Lesson } from "@/components/LessonsFeed";
+import { TrendingAlphaSidebar } from "@/components/TrendingAlphaSidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Flame, Clock, Lightbulb } from "lucide-react";
+import { PadelIcon, TennisIcon, GolfIcon, GymIcon, RunningIcon, CombatIcon } from "@/components/icons/SportIcons";
+import { cn } from "@/lib/utils";
+
+const sportFilters = [
+  { id: "all", label: "All", icon: null },
+  { id: "padel", label: "Padel", icon: PadelIcon },
+  { id: "tennis", label: "Tennis", icon: TennisIcon },
+  { id: "golf", label: "Golf", icon: GolfIcon },
+  { id: "gym", label: "Gym", icon: GymIcon },
+  { id: "running", label: "Running", icon: RunningIcon },
+  { id: "combat", label: "Combat", icon: CombatIcon },
+];
 
 // Mock data for demonstration
 const mockLessons: Lesson[] = [
@@ -77,6 +90,7 @@ const mockLessons: Lesson[] = [
 const Lessons = () => {
   const [lessons, setLessons] = useState<Lesson[]>(mockLessons);
   const [activeTab, setActiveTab] = useState<"top" | "recent">("top");
+  const [activeSport, setActiveSport] = useState("all");
 
   const handleUpvote = (id: string) => {
     setLessons((prev) =>
@@ -94,7 +108,11 @@ const Lessons = () => {
     );
   };
 
-  const sortedLessons = [...lessons].sort((a, b) => {
+  const filteredLessons = lessons.filter(
+    (lesson) => activeSport === "all" || lesson.sport === activeSport
+  );
+
+  const sortedLessons = [...filteredLessons].sort((a, b) => {
     if (activeTab === "top") {
       return b.upvotesCount - a.upvotesCount;
     }
@@ -118,6 +136,35 @@ const Lessons = () => {
             </p>
           </div>
         </div>
+
+        {/* Sport Filters */}
+        <div className="flex gap-2 overflow-x-auto scrollbar-hide py-1 -mx-4 px-4">
+          {sportFilters.map((filter) => {
+            const Icon = filter.icon;
+            const isActive = activeSport === filter.id;
+            
+            return (
+              <button
+                key={filter.id}
+                onClick={() => setActiveSport(filter.id)}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 flex-shrink-0 text-xs",
+                  isActive
+                    ? "bg-primary/20 text-primary border border-primary/50"
+                    : "bg-card/50 border border-border/50 text-muted-foreground hover:text-foreground hover:border-border"
+                )}
+              >
+                {Icon && <Icon className="w-3 h-3" />}
+                <span className="font-medium">{filter.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Trending Alpha Sidebar */}
+        <TrendingAlphaSidebar 
+          onTagClick={(tag) => console.log("Filter by:", tag)} 
+        />
 
         {/* Tabs for sorting */}
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "top" | "recent")}>
