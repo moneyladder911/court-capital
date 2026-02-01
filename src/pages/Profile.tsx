@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { BottomNav } from "@/components/BottomNav";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +23,10 @@ import {
 import { PadelIcon, TennisIcon, GolfIcon, GymIcon, RunningIcon, CombatIcon } from "@/components/icons/SportIcons";
 import { TrustScoreIndicator } from "@/components/TrustScoreIndicator";
 import { ReputationTierBadge } from "@/components/ReputationTierBadge";
+import { NoShowWarning } from "@/components/NoShowWarning";
+import { useCurrentProfile } from "@/hooks/useProfile";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 interface UserProfile {
   name: string;
@@ -33,6 +38,10 @@ interface UserProfile {
   isVIP: boolean;
   trustScore: number;
   reputationTier: "member" | "pioneer" | "catalyst";
+  noShows?: number;
+  attendanceRate?: number;
+  energyStyle?: string | null;
+  cryptoFocus?: string[];
   stats: {
     sessionsAttended: number;
     connectionsCount: number;
@@ -120,7 +129,45 @@ const getSportIcon = (sport: string) => {
 };
 
 const Profile = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { data: profile, isLoading } = useCurrentProfile();
   const [activeTab, setActiveTab] = useState<"stats" | "badges" | "activity">("stats");
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate("/auth");
+  };
+
+  // Use profile data if available, otherwise fall back to mock
+  const displayProfile = profile ? {
+    name: profile.name,
+    city: profile.city || "Unknown",
+    bio: profile.bio || "",
+    role: profile.crypto_role || "member",
+    mindset: profile.mindset || "builder",
+    isVerified: profile.is_verified || false,
+    isVIP: profile.member_tier === "inner_circle" || profile.member_tier === "elite",
+    trustScore: profile.trust_score || 50,
+    reputationTier: (profile.reputation_tier || "member") as "member" | "pioneer" | "catalyst",
+    noShows: profile.no_shows || 0,
+    attendanceRate: profile.attendance_rate || 100,
+    stats: {
+      sessionsAttended: 0,
+      connectionsCount: 0,
+      eventsAttended: 0,
+      reliability: profile.attendance_rate || 100,
+      streak: 0,
+      points: 0,
+      rank: 0,
+    },
+    sports: profile.sports.map(s => ({
+      name: s.sport.charAt(0).toUpperCase() + s.sport.slice(1),
+      skillLevel: s.skill_level || 5,
+    })),
+    energyStyle: profile.energy_style,
+    cryptoFocus: profile.crypto_focus || [],
+  } : mockProfile;
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -166,8 +213,20 @@ const Profile = () => {
 
           <p className="text-sm text-muted-foreground mb-4">{mockProfile.bio}</p>
 
+          {/* No-Show Warning if applicable */}
+          {displayProfile.noShows > 0 && (
+            <div className="mb-4">
+              <NoShowWarning 
+                noShowCount={displayProfile.noShows} 
+                attendanceRate={displayProfile.attendanceRate}
+                size="md"
+                showDetails
+              />
+            </div>
+          )}
+
           <div className="flex gap-2 justify-center">
-            <Button variant="gold-outline" size="sm">
+            <Button variant="gold-outline" size="sm" onClick={() => navigate("/profile/edit")}>
               <Edit className="w-4 h-4 mr-1" />
               Edit Profile
             </Button>
@@ -386,7 +445,7 @@ const Profile = () => {
         )}
 
         {/* Logout Button */}
-        <Button variant="outline" className="w-full text-muted-foreground">
+        <Button variant="outline" className="w-full text-muted-foreground" onClick={handleSignOut}>
           <LogOut className="w-4 h-4 mr-2" />
           Sign Out
         </Button>
