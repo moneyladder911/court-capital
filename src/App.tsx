@@ -16,6 +16,7 @@ import Groups from "./pages/Groups";
 import CreateSession from "./pages/CreateSession";
 import Lessons from "./pages/Lessons";
 import Manifesto from "./pages/Manifesto";
+import Lounge from "./pages/Lounge";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/create-session" element={<CreateSession />} />
           <Route path="/lessons" element={<Lessons />} />
           <Route path="/manifesto" element={<Manifesto />} />
+          <Route path="/lounge" element={<Lounge />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
