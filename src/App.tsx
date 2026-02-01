@@ -10,10 +10,12 @@ import Connections from "./pages/Connections";
 import Events from "./pages/Events";
 import Leaderboard from "./pages/Leaderboard";
 import Profile from "./pages/Profile";
+import ProfileEdit from "./pages/ProfileEdit";
 import Matchmaking from "./pages/Matchmaking";
 import Groups from "./pages/Groups";
 import CreateSession from "./pages/CreateSession";
 import Lessons from "./pages/Lessons";
+import Manifesto from "./pages/Manifesto";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,10 +34,12 @@ const App = () => (
           <Route path="/events" element={<Events />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/edit" element={<ProfileEdit />} />
           <Route path="/matchmaking" element={<Matchmaking />} />
           <Route path="/groups" element={<Groups />} />
           <Route path="/create-session" element={<CreateSession />} />
           <Route path="/lessons" element={<Lessons />} />
+          <Route path="/manifesto" element={<Manifesto />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -481,20 +481,26 @@ export type Database = {
       }
       session_participants: {
         Row: {
+          attended: boolean | null
           id: string
           joined_at: string | null
+          marked_at: string | null
           session_id: string
           user_id: string
         }
         Insert: {
+          attended?: boolean | null
           id?: string
           joined_at?: string | null
+          marked_at?: string | null
           session_id: string
           user_id: string
         }
         Update: {
+          attended?: boolean | null
           id?: string
           joined_at?: string | null
+          marked_at?: string | null
           session_id?: string
           user_id?: string
         }
