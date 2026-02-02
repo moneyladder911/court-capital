@@ -18,7 +18,7 @@ export const useLoungeReactions = (userId?: string) => {
         setError(null);
 
         const { data: existing } = await supabase
-          .from("lounge_reactions")
+          .from("lounge_reactions" as any)
           .select("id")
           .eq("post_id", postId)
           .eq("user_id", userId)
@@ -27,14 +27,14 @@ export const useLoungeReactions = (userId?: string) => {
 
         if (existing) {
           const { error: deleteError } = await supabase
-            .from("lounge_reactions")
+            .from("lounge_reactions" as any)
             .delete()
-            .eq("id", existing.id);
+            .eq("id", (existing as any).id);
 
           if (deleteError) throw deleteError;
         } else {
           const { error: insertError } = await supabase
-            .from("lounge_reactions")
+            .from("lounge_reactions" as any)
             .insert({
               post_id: postId,
               user_id: userId,
@@ -69,7 +69,7 @@ export const useLoungeReactions = (userId?: string) => {
         setError(null);
 
         const { data, error: insertError } = await supabase
-          .from("lounge_posts")
+          .from("lounge_posts" as any)
           .insert({
             user_id: userId,
             post_type: postType,
@@ -99,7 +99,7 @@ export const useLoungeReactions = (userId?: string) => {
         setError(null);
 
         const { error: deleteError } = await supabase
-          .from("lounge_posts")
+          .from("lounge_posts" as any)
           .delete()
           .eq("id", postId)
           .eq("user_id", userId);

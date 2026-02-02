@@ -8,6 +8,13 @@ export interface LoungeVibe {
   scheduled_date: string;
 }
 
+interface DbVibe {
+  id: string;
+  prompt: string;
+  created_at: string;
+  scheduled_date: string;
+}
+
 export const useLoungeVibe = () => {
   const [vibe, setVibe] = useState<LoungeVibe | null>(null);
   const [loading, setLoading] = useState(true);
@@ -20,7 +27,7 @@ export const useLoungeVibe = () => {
         const today = new Date().toISOString().split("T")[0];
 
         const { data, error: fetchError } = await supabase
-          .from("lounge_vibes")
+          .from("lounge_vibes" as any)
           .select("*")
           .eq("scheduled_date", today)
           .maybeSingle();
@@ -29,15 +36,29 @@ export const useLoungeVibe = () => {
 
         if (!data) {
           const { data: anyVibe } = await supabase
-            .from("lounge_vibes")
+            .from("lounge_vibes" as any)
             .select("*")
             .order("scheduled_date", { ascending: false })
             .limit(1)
             .maybeSingle();
 
-          setVibe(anyVibe);
+          if (anyVibe) {
+            const vibeData = anyVibe as unknown as DbVibe;
+            setVibe({
+              id: vibeData.id,
+              prompt: vibeData.prompt,
+              created_at: vibeData.created_at,
+              scheduled_date: vibeData.scheduled_date,
+            });
+          }
         } else {
-          setVibe(data);
+          const vibeData = data as unknown as DbVibe;
+          setVibe({
+            id: vibeData.id,
+            prompt: vibeData.prompt,
+            created_at: vibeData.created_at,
+            scheduled_date: vibeData.scheduled_date,
+          });
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch vibe");
