@@ -15,6 +15,14 @@ export interface ThreadReply {
   };
 }
 
+interface DbThread {
+  id: string;
+  parent_post_id: string;
+  user_id: string;
+  content: string;
+  created_at: string;
+}
+
 export const useLoungeThreads = (postId: string, userId?: string) => {
   const [threads, setThreads] = useState<ThreadReply[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,18 +33,38 @@ export const useLoungeThreads = (postId: string, userId?: string) => {
       try {
         setLoading(true);
         const { data, error: fetchError } = await supabase
-          .from("lounge_threads")
-          .select(
-            `
-            *,
-            profile:profiles(name, avatar_url, role, member_tier)
-          `
-          )
+          .from("lounge_threads" as any)
+          .select("*")
           .eq("parent_post_id", postId)
           .order("created_at", { ascending: true });
 
         if (fetchError) throw fetchError;
-        setThreads(data || []);
+
+        // Fetch profile data for each thread
+        const threadsWithProfiles = await Promise.all(
+          ((data as unknown as DbThread[]) || []).map(async (thread) => {
+            const { data: profileData } = await supabase
+              .from("profiles")
+              .select("name, avatar_url, crypto_role, member_tier")
+              .eq("user_id", thread.user_id)
+              .maybeSingle();
+
+            return {
+              id: thread.id,
+              user_id: thread.user_id,
+              content: thread.content,
+              created_at: thread.created_at,
+              profile: {
+                name: profileData?.name || "Anonymous",
+                avatar_url: profileData?.avatar_url || null,
+                role: profileData?.crypto_role || "founder",
+                member_tier: profileData?.member_tier || "explorer",
+              },
+            } as ThreadReply;
+          })
+        );
+
+        setThreads(threadsWithProfiles);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch threads");
       } finally {
@@ -72,7 +100,7 @@ export const useLoungeThreads = (postId: string, userId?: string) => {
       try {
         setLoading(true);
         const { data, error: insertError } = await supabase
-          .from("lounge_threads")
+          .from("lounge_threads" as any)
           .insert({
             parent_post_id: postId,
             user_id: userId,

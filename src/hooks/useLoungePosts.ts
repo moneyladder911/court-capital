@@ -30,6 +30,21 @@ export interface LoungePost {
   thread_count: number;
 }
 
+interface DbLoungePost {
+  id: string;
+  user_id: string;
+  post_type: string;
+  title: string;
+  content: string | null;
+  link: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+interface DbReaction {
+  reaction_type: string;
+}
+
 export const useLoungePosts = (userId?: string) => {
   const [posts, setPosts] = useState<LoungePost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,48 +56,63 @@ export const useLoungePosts = (userId?: string) => {
         setLoading(true);
         setError(null);
 
-        const { data, error: fetchError } = await supabase
-          .from("lounge_posts")
-          .select(
-            `
-            *,
-            profile:profiles(name, avatar_url, role, member_tier, is_online)
-          `
-          )
+        // Fetch posts with profile data
+        const { data: postsData, error: fetchError } = await supabase
+          .from("lounge_posts" as any)
+          .select("*")
           .order("created_at", { ascending: false });
 
         if (fetchError) throw fetchError;
 
+        // Fetch profile data for each post
         const enrichedPosts = await Promise.all(
-          (data || []).map(async (post) => {
+          ((postsData as unknown as DbLoungePost[]) || []).map(async (post) => {
+            // Get profile
+            const { data: profileData } = await supabase
+              .from("profiles")
+              .select("name, avatar_url, crypto_role, member_tier, is_online")
+              .eq("user_id", post.user_id)
+              .maybeSingle();
+
+            // Get reactions
             const { data: reactions } = await supabase
-              .from("lounge_reactions")
+              .from("lounge_reactions" as any)
               .select("reaction_type")
               .eq("post_id", post.id);
 
+            // Get threads count
             const { data: threads } = await supabase
-              .from("lounge_threads")
+              .from("lounge_threads" as any)
               .select("id")
               .eq("parent_post_id", post.id);
 
+            const reactionsList = (reactions as unknown as DbReaction[]) || [];
             const reactionCounts = {
-              seen: reactions?.filter((r) => r.reaction_type === "seen").length || 0,
-              interesting: reactions?.filter((r) => r.reaction_type === "interesting").length || 0,
-              vibe: reactions?.filter((r) => r.reaction_type === "vibe").length || 0,
+              seen: reactionsList.filter((r) => r.reaction_type === "seen").length,
+              interesting: reactionsList.filter((r) => r.reaction_type === "interesting").length,
+              vibe: reactionsList.filter((r) => r.reaction_type === "vibe").length,
             };
 
-            const userReactions = userId
-              ? reactions
-                  ?.filter((r) => r.reaction_type)
-                  .map((r) => r.reaction_type) || []
+            const userReactions: ReactionType[] = userId
+              ? reactionsList
+                  .filter((r) => r.reaction_type)
+                  .map((r) => r.reaction_type as ReactionType)
               : [];
 
             return {
               ...post,
+              post_type: post.post_type as PostType,
+              profile: {
+                name: profileData?.name || "Anonymous",
+                avatar_url: profileData?.avatar_url || null,
+                role: profileData?.crypto_role || "founder",
+                member_tier: profileData?.member_tier || "explorer",
+                is_online: profileData?.is_online || false,
+              },
               reactions: reactionCounts,
               user_reactions: userReactions,
-              thread_count: threads?.length || 0,
-            };
+              thread_count: (threads as any[])?.length || 0,
+            } as LoungePost;
           })
         );
 

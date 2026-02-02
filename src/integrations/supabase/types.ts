@@ -348,6 +348,124 @@ export type Database = {
           },
         ]
       }
+      lounge_posts: {
+        Row: {
+          content: string | null
+          created_at: string
+          id: string
+          link: string | null
+          post_type: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          post_type: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          post_type?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      lounge_reactions: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          reaction_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          reaction_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          reaction_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lounge_reactions_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "lounge_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lounge_threads: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          parent_post_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          parent_post_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          parent_post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lounge_threads_parent_post_id_fkey"
+            columns: ["parent_post_id"]
+            isOneToOne: false
+            referencedRelation: "lounge_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lounge_vibes: {
+        Row: {
+          created_at: string
+          id: string
+          prompt: string
+          scheduled_date: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          prompt: string
+          scheduled_date: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          prompt?: string
+          scheduled_date?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           content: string
