@@ -50,7 +50,7 @@ export const Offerings: React.FC = () => {
     <section ref={sectionRef} className="py-20 md:py-24 px-6">
       <div className="max-w-[1200px] mx-auto">
         {/* Section header */}
-        <div className="reveal mb-14 md:mb-20">
+        <div className="reveal mb-14 md:mb-20 text-center flex flex-col items-center">
           <p className="font-sans text-[0.65rem] font-medium tracking-[0.35em] uppercase text-muted-foreground mb-6">
             The Offering
           </p>
@@ -69,20 +69,20 @@ export const Offerings: React.FC = () => {
               className={`reveal reveal-delay-${index + 1}`}
             >
               {/* Top line */}
-              <div className="divider mb-8" />
+              <div className="w-12 h-px bg-border/50 mx-auto mb-8" />
 
               {/* Number */}
-              <p className="font-sans text-[0.65rem] font-medium tracking-[0.3em] uppercase text-primary mb-6">
+              <p className="font-sans text-[0.65rem] font-medium tracking-[0.3em] uppercase text-primary mb-6 text-center">
                 {item.number}
               </p>
 
               {/* Title */}
-              <h3 className="font-display text-xl md:text-2xl text-foreground mb-4">
+              <h3 className="font-display text-xl md:text-2xl text-foreground mb-4 text-center">
                 {item.title}
               </h3>
 
               {/* Description */}
-              <p className="font-sans text-sm text-muted-foreground leading-relaxed">
+              <p className="font-sans text-sm text-muted-foreground leading-relaxed text-center">
                 {item.description}
               </p>
             </div>

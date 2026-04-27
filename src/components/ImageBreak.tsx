@@ -33,21 +33,20 @@ export const ImageBreak: React.FC = () => {
         }}
       />
 
-      {/* Heavy gradient from left for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-transparent md:w-3/4" />
-      <div className="absolute inset-0 bg-black/30 md:bg-black/20" />
+      {/* Subtle vignette for text readability */}
+      <div className="absolute inset-0 bg-black/50 md:bg-black/40" />
 
-      {/* Text Overlay - Left Aligned Editorial Style */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-center px-8 md:px-16 max-w-[1200px] mx-auto w-full">
-        <div className="w-8 h-px bg-primary/60 mb-8" />
+      {/* Text Overlay - Center Aligned */}
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-8 md:px-16 max-w-[1200px] mx-auto w-full">
+        <div className="w-8 h-px bg-primary/60 mb-8 mx-auto" />
 
-        <h2 className="font-display text-3xl md:text-5xl lg:text-5xl text-foreground mb-8 max-w-[700px] leading-[1.1] drop-shadow-xl">
+        <h2 className="font-display text-3xl md:text-5xl lg:text-5xl text-foreground mb-8 max-w-[700px] mx-auto leading-[1.1] drop-shadow-xl">
           Padel House is <span className="italic text-primary">not</span> open
           <br />
           to the public.
         </h2>
 
-        <p className="font-sans font-light text-base md:text-lg text-muted-foreground/90 leading-relaxed max-w-[450px] mb-10 drop-shadow-md">
+        <p className="font-sans font-light text-base md:text-lg text-muted-foreground/90 leading-relaxed max-w-[450px] mx-auto mb-10 drop-shadow-md">
           Access is strictly managed by SW Lifestyle. Membership is strictly capped at 225 individuals globally to protect the integrity of the experience.
         </p>
 

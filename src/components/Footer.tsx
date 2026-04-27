@@ -28,15 +28,7 @@ export const Footer: React.FC<FooterProps> = ({ onRequestAccess }) => {
             </p>
           </div>
 
-          {/* Center — links */}
-          <div className="flex items-center gap-8">
-            <button
-              onClick={onRequestAccess}
-              className="font-sans text-[0.65rem] font-medium tracking-[0.2em] uppercase text-muted-foreground hover:text-primary transition-colors duration-300"
-            >
-              Request Access
-            </button>
-          </div>
+
 
           {/* Right — social/legal & login */}
           <div className="flex flex-col items-start md:items-end gap-4">
