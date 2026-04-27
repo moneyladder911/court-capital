@@ -68,9 +68,9 @@ export const Hero: React.FC<HeroProps> = ({ onRequestAccess }) => {
 
         {/* Headline */}
         <h1 className="hero-reveal reveal font-display text-4xl sm:text-5xl md:text-7xl lg:text-[5.5rem] font-medium text-white mb-8 leading-[1.05]">
-          The Pinnacle of
+          Dubai's Most Exclusive
           <br />
-          <span className="italic text-primary">Padel.</span>
+          <span className="italic text-primary">Private Padel Club.</span>
         </h1>
 
         {/* Subtext */}
