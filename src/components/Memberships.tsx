@@ -7,32 +7,35 @@ interface MembershipsProps {
 const tiers = [
   {
     name: "Elite Global",
+    description: "The ultimate access for the global player.",
     features: [
-      "Comprehensive private sessions (padel or tennis)",
-      "Priority booking for all events",
-      "Global access (Dubai, Marbella, London)",
-      "Seeded league access",
-      "Full family inclusion",
+      "Unlimited private sessions (padel or tennis)",
+      "Guaranteed entry to all exclusive VIP events",
+      "7-day advance priority booking",
+      "Global access (Dubai, Marbella, London) with Concierge",
+      "Full family inclusion (Up to 4 members)",
     ],
   },
   {
     name: "Pro",
+    description: "For the dedicated athlete and competitor.",
     features: [
-      "Core private sessions (padel or tennis)",
-      "Access to all private events",
+      "4 core private sessions per month",
+      "Priority access to all private club events",
+      "72-hour advance priority booking",
       "Global access (Dubai, Marbella, London)",
-      "League access",
-      "Full family inclusion",
+      "Partner inclusion (+1 member)",
     ],
   },
   {
     name: "Starter",
+    description: "Introduction to the SW network.",
     features: [
-      "Introductory private sessions (padel or tennis)",
-      "Event access",
-      "Global access (Dubai, Marbella, London)",
-      "League access",
-      "Full family inclusion",
+      "2 introductory private sessions per month",
+      "Access to select networking events",
+      "48-hour advance booking window",
+      "Regional access (Dubai only)",
+      "Individual membership",
     ],
   },
 ];
@@ -82,9 +85,12 @@ export const Memberships: React.FC<MembershipsProps> = ({ onRequestAccess }) => 
               key={tier.name}
               className={`reveal reveal-delay-${index + 1} flex flex-col p-8 border border-border/30 bg-muted/5 hover:bg-muted/10 transition-colors duration-500`}
             >
-              <h3 className="font-display text-2xl text-foreground mb-8 pb-8 border-b border-border/20">
+              <h3 className="font-display text-2xl text-foreground mb-3">
                 {tier.name}
               </h3>
+              <p className="font-sans text-xs text-muted-foreground mb-8 pb-8 border-b border-border/20 min-h-[4rem]">
+                {tier.description}
+              </p>
               
               <ul className="flex-grow space-y-6 mb-12">
                 {tier.features.map((feature, i) => (
