@@ -5,7 +5,7 @@ const amenities = [
   {
     name: "Lifestyle Portal",
     description: "Your central hub for club activity. Access the private calendar of upcoming invitationals, exhibition games, and members-only social events.",
-    image: "/lifestyle-portal.png",
+    image: "/padel-house-events.png",
   },
   {
     name: "Matchmaking",

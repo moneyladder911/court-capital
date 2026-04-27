@@ -83,15 +83,6 @@ export const Experience: React.FC<ExperienceProps> = ({ onRequestAccess }) => {
           ))}
         </div>
 
-        {/* Lifestyle Portal Image */}
-        <div className="reveal reveal-delay-3 mt-20 max-w-[900px] mx-auto px-4">
-          <img 
-            src="/padel-house-events.png" 
-            alt="Padel House Exclusive Events Portal" 
-            className="w-full h-auto rounded-2xl border border-primary/20 shadow-[0_0_60px_rgba(201,169,110,0.08)] object-cover"
-          />
-        </div>
-
         {/* Bottom CTA */}
         <div className="reveal reveal-delay-4 text-center mt-24">
           <button onClick={onRequestAccess} className="btn-outline">
