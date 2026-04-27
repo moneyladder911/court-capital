@@ -36,6 +36,8 @@ export const Hero: React.FC<HeroProps> = ({ onRequestAccess }) => {
       {/* Background Image with Parallax */}
       <div className="absolute inset-0 overflow-hidden">
         <div
+          role="img"
+          aria-label="Private padel club Dubai – Padel House"
           className="absolute inset-[-10%] w-[120%] h-[120%] bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('/hero-court.png')",
@@ -68,12 +70,12 @@ export const Hero: React.FC<HeroProps> = ({ onRequestAccess }) => {
         <h1 className="hero-reveal reveal font-display text-4xl sm:text-5xl md:text-7xl lg:text-[5.5rem] font-medium text-white mb-8 leading-[1.05]">
           The Pinnacle of
           <br />
-          <span className="italic text-primary">Padel.</span>
+          <span className="italic text-primary">Padel in Dubai.</span>
         </h1>
 
         {/* Subtext */}
         <p className="hero-reveal reveal font-sans text-[0.8rem] md:text-[0.9rem] text-white/50 max-w-[500px] mx-auto mb-14 leading-relaxed font-light">
-          An exclusive private padel and tennis facility for the SW network.{" "}
+          An exclusive private padel and tennis experience for the SW network.{" "}
           <br className="hidden sm:block" />
           Reserved for global luxury brands and sports professionals.
         </p>
@@ -87,16 +89,19 @@ export const Hero: React.FC<HeroProps> = ({ onRequestAccess }) => {
       </div>
 
       {/* Three stat/feature columns at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 hidden md:block">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-3 border-t border-primary/20 bg-background/30 backdrop-blur-sm">
-          <div className="py-6 text-center border-r border-primary/20">
-            <p className="font-sans text-[0.6rem] tracking-[0.3em] uppercase text-primary/80">Members Only</p>
+      <div className="absolute bottom-0 left-0 right-0 z-20 hidden md:block bg-background/80 backdrop-blur-md border-t border-primary/20">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-3">
+          <div className="py-8 px-6 text-center border-r border-primary/20">
+            <h2 className="font-sans text-[0.65rem] tracking-[0.3em] uppercase text-primary mb-2">Members Only</h2>
+            <p className="font-sans text-xs text-muted-foreground/80 leading-relaxed max-w-[250px] mx-auto">Access is strictly reserved for our verified global network of athletes and executives.</p>
           </div>
-          <div className="py-6 text-center border-r border-primary/20">
-            <p className="font-sans text-[0.6rem] tracking-[0.3em] uppercase text-primary/80">Invitation Required</p>
+          <div className="py-8 px-6 text-center border-r border-primary/20">
+            <h2 className="font-sans text-[0.65rem] tracking-[0.3em] uppercase text-primary mb-2">Invitation Required</h2>
+            <p className="font-sans text-xs text-muted-foreground/80 leading-relaxed max-w-[250px] mx-auto">New applications are vetted carefully to ensure the integrity of our exclusive community.</p>
           </div>
-          <div className="py-6 text-center">
-            <p className="font-sans text-[0.6rem] tracking-[0.3em] uppercase text-primary/80">Dubai's Finest</p>
+          <div className="py-8 px-6 text-center">
+            <h2 className="font-sans text-[0.65rem] tracking-[0.3em] uppercase text-primary mb-2">Dubai's Finest</h2>
+            <p className="font-sans text-xs text-muted-foreground/80 leading-relaxed max-w-[250px] mx-auto">Experience unparalleled private padel events, tailored coaching, and elite matchmaking in the heart of the UAE.</p>
           </div>
         </div>
       </div>
