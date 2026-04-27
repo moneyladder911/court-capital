@@ -5,7 +5,6 @@ import { SocialProof } from "@/components/SocialProof";
 import { Offerings } from "@/components/Offerings";
 import { ImageBreak } from "@/components/ImageBreak";
 import { Experience } from "@/components/Experience";
-import { PortalPreview } from "@/components/PortalPreview";
 import { Footer } from "@/components/Footer";
 import { RequestAccessModal } from "@/components/RequestAccessModal";
 
@@ -24,7 +23,6 @@ const Index = () => {
         <SocialProof />
         <Offerings />
         <ImageBreak />
-        <PortalPreview />
         <Experience onRequestAccess={openModal} />
       </main>
 
