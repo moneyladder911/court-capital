@@ -46,7 +46,7 @@ export const ImageBreak: React.FC = () => {
           to the public.
         </h2>
 
-        <p className="font-sans font-light text-base md:text-lg text-muted-foreground/90 leading-relaxed max-w-[450px] mx-auto mb-10 drop-shadow-md">
+        <p className="font-sans font-normal text-base md:text-lg text-white/95 leading-relaxed max-w-[450px] mx-auto mb-10 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]">
           Access is strictly managed by SW Lifestyle. Membership is strictly capped at 225 individuals globally to protect the integrity of the experience.
         </p>
 
