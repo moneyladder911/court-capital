@@ -80,7 +80,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onRequestAccess }) => {
                 onClick={onRequestAccess}
                 className="hidden md:inline-flex border border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-2.5 font-sans text-[0.6rem] font-medium tracking-[0.2em] uppercase transition-colors duration-300"
               >
-                Request Access
+                Members Portal
               </button>
 
               {/* Mobile hamburger */}
@@ -131,7 +131,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onRequestAccess }) => {
             }}
             className="font-sans text-[0.7rem] font-medium tracking-[0.2em] uppercase text-primary"
           >
-            Request Access
+            Members Portal
           </button>
         </div>
       )}
