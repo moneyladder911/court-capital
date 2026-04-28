@@ -92,16 +92,13 @@ export const Hero: React.FC<HeroProps> = ({ onRequestAccess }) => {
       <div className="absolute bottom-0 left-0 right-0 z-20 hidden md:block bg-background/80 backdrop-blur-md border-t border-primary/20">
         <div className="max-w-[1200px] mx-auto grid grid-cols-3">
           <div className="py-8 px-6 text-center border-r border-primary/20">
-            <h2 className="font-sans text-[0.65rem] tracking-[0.3em] uppercase text-primary mb-2">World-Class Courts</h2>
-            <p className="font-sans text-xs text-muted-foreground/80 leading-relaxed max-w-[250px] mx-auto">Private padel & tennis facilities reserved exclusively for members.</p>
+            <h2 className="font-sans text-[0.65rem] tracking-[0.3em] uppercase text-primary">World-Class Courts</h2>
           </div>
           <div className="py-8 px-6 text-center border-r border-primary/20">
-            <h2 className="font-sans text-[0.65rem] tracking-[0.3em] uppercase text-primary mb-2">Elite Matchmaking</h2>
-            <p className="font-sans text-xs text-muted-foreground/80 leading-relaxed max-w-[250px] mx-auto">Play alongside athletes, executives and global luxury professionals.</p>
+            <h2 className="font-sans text-[0.65rem] tracking-[0.3em] uppercase text-primary">Elite Matchmaking</h2>
           </div>
           <div className="py-8 px-6 text-center">
-            <h2 className="font-sans text-[0.65rem] tracking-[0.3em] uppercase text-primary mb-2">Concierge Access</h2>
-            <p className="font-sans text-xs text-muted-foreground/80 leading-relaxed max-w-[250px] mx-auto">Every booking, every detail — handled for you, always.</p>
+            <h2 className="font-sans text-[0.65rem] tracking-[0.3em] uppercase text-primary">Concierge Access</h2>
           </div>
         </div>
       </div>
