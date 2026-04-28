@@ -141,11 +141,10 @@ export const RequestAccessModal: React.FC<RequestAccessModalProps> = ({
                         className="w-full bg-transparent border-b border-border/50 py-3 pr-8 text-sm text-foreground focus:outline-none focus:border-primary transition-colors font-sans appearance-none cursor-pointer"
                       >
                         <option value="" disabled className="text-muted-foreground bg-background">Select your highest level</option>
-                        <option value="Professional / ATP" className="bg-background">Professional / ATP Ranked</option>
-                        <option value="Ex-Professional" className="bg-background">Ex-Professional</option>
-                        <option value="Division 1 College" className="bg-background">Division 1 College</option>
-                        <option value="Advanced Amateur (5.0+)" className="bg-background">Advanced Amateur (5.0+)</option>
-                        <option value="Intermediate" className="bg-background">Intermediate / Recreational</option>
+                        <option value="Beginner" className="bg-background">Beginner</option>
+                        <option value="Intermediate" className="bg-background">Intermediate</option>
+                        <option value="Advanced" className="bg-background">Advanced</option>
+                        <option value="Professional" className="bg-background">Professional</option>
                       </select>
                       <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                     </div>
