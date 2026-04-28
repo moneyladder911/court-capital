@@ -64,7 +64,7 @@ export const RequestAccessModal: React.FC<RequestAccessModalProps> = ({
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 max-h-[85vh] overflow-y-auto custom-scrollbar pr-4 pb-8">
             <div className="mb-10 mt-8">
               <h2 className="font-display text-3xl md:text-4xl text-foreground">
-                Request Access.
+                Apply for Membership.
               </h2>
               <p className="font-sans text-[0.65rem] tracking-[0.2em] uppercase text-muted-foreground mt-4">
                 Global membership is strictly capped at 225.
@@ -122,6 +122,28 @@ export const RequestAccessModal: React.FC<RequestAccessModalProps> = ({
               <div className="space-y-6">
                 <div>
                   <label className="block font-sans text-[0.65rem] tracking-[0.2em] uppercase text-muted-foreground mb-3">
+                    Your Network
+                  </label>
+                  <div className="relative">
+                    <select
+                      name="partners"
+                      required
+                      value={formData.partners}
+                      onChange={handleChange}
+                      className="w-full bg-transparent border-b border-border/50 py-3 pr-8 text-sm text-foreground focus:outline-none focus:border-primary transition-colors font-sans appearance-none cursor-pointer"
+                    >
+                      <option value="" disabled className="text-muted-foreground bg-background">What industry are you in / who do you represent?</option>
+                      <option value="Finance / Private Equity" className="bg-background">Finance / Private Equity</option>
+                      <option value="Real Estate / Development" className="bg-background">Real Estate / Development</option>
+                      <option value="Sports / Entertainment" className="bg-background">Sports / Entertainment</option>
+                      <option value="Technology / Founder" className="bg-background">Technology / Founder</option>
+                      <option value="Other" className="bg-background">Other</option>
+                    </select>
+                    <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block font-sans text-[0.65rem] tracking-[0.2em] uppercase text-muted-foreground mb-3">
                     Playing Level
                   </label>
                   <div className="relative">
@@ -137,27 +159,6 @@ export const RequestAccessModal: React.FC<RequestAccessModalProps> = ({
                       <option value="Intermediate" className="bg-background">Intermediate</option>
                       <option value="Advanced" className="bg-background">Advanced</option>
                       <option value="Professional" className="bg-background">Professional</option>
-                    </select>
-                    <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block font-sans text-[0.65rem] tracking-[0.2em] uppercase text-muted-foreground mb-3">
-                    Typical Opponents
-                  </label>
-                  <div className="relative">
-                    <select
-                      name="partners"
-                      required
-                      value={formData.partners}
-                      onChange={handleChange}
-                      className="w-full bg-transparent border-b border-border/50 py-3 pr-8 text-sm text-foreground focus:outline-none focus:border-primary transition-colors font-sans appearance-none cursor-pointer"
-                    >
-                      <option value="" disabled className="text-muted-foreground bg-background">Who do you usually compete with?</option>
-                      <option value="Professional Athletes" className="bg-background">Professional Athletes</option>
-                      <option value="High-Net-Worth Executives" className="bg-background">High-Net-Worth Executives</option>
-                      <option value="Club Professionals" className="bg-background">Club Professionals</option>
-                      <option value="Recreational Players" className="bg-background">Recreational Players</option>
                     </select>
                     <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                   </div>
