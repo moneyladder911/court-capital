@@ -78,16 +78,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onRequestAccess }) => {
             <div className="flex items-center justify-end gap-4">
               <Link
                 to="/login"
-                className="hidden md:inline-flex font-sans text-[0.6rem] font-medium tracking-[0.2em] uppercase text-muted-foreground hover:text-foreground transition-colors duration-300"
+                className="hidden md:inline-flex border border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-2.5 font-sans text-[0.6rem] font-medium tracking-[0.2em] uppercase transition-colors duration-300"
               >
                 Members Portal
               </Link>
-              <button
-                onClick={onRequestAccess}
-                className="hidden md:inline-flex border border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-2.5 font-sans text-[0.6rem] font-medium tracking-[0.2em] uppercase transition-colors duration-300"
-              >
-                Request Access
-              </button>
 
               {/* Mobile hamburger */}
               <button
@@ -134,19 +128,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onRequestAccess }) => {
             <Link
               to="/login"
               onClick={() => setMobileOpen(false)}
-              className="font-sans text-[0.7rem] font-medium tracking-[0.2em] uppercase text-muted-foreground hover:text-foreground"
+              className="font-sans text-[0.7rem] font-medium tracking-[0.2em] uppercase text-primary"
             >
               Members Portal
             </Link>
-            <button
-              onClick={() => {
-                setMobileOpen(false);
-                onRequestAccess();
-              }}
-              className="font-sans text-[0.7rem] font-medium tracking-[0.2em] uppercase text-primary"
-            >
-              Request Access
-            </button>
           </div>
         </div>
       )}
