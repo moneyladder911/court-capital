@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, ArrowRight, ChevronDown } from "lucide-react";
+import { supabase } from "../lib/supabase";
 
 interface RequestAccessModalProps {
   isOpen: boolean;
@@ -19,6 +20,8 @@ export const RequestAccessModal: React.FC<RequestAccessModalProps> = ({
     intent: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Lock body scroll
   useEffect(() => {
@@ -29,6 +32,8 @@ export const RequestAccessModal: React.FC<RequestAccessModalProps> = ({
       // Reset after closing
       setTimeout(() => {
         setSubmitted(false);
+        setIsSubmitting(false);
+        setError(null);
         setFormData({ name: "", email: "", social: "", level: "", partners: "", intent: "" });
       }, 500);
     }
@@ -43,9 +48,34 @@ export const RequestAccessModal: React.FC<RequestAccessModalProps> = ({
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const { error: submitError } = await supabase
+        .from('membership_applications')
+        .insert([
+          {
+            name: formData.name,
+            email: formData.email,
+            social: formData.social,
+            level: formData.level,
+            partners: formData.partners,
+            intent: formData.intent,
+          }
+        ]);
+
+      if (submitError) throw submitError;
+
+      setSubmitted(true);
+    } catch (err: any) {
+      console.error('Error submitting application:', err);
+      setError(err.message || 'An error occurred while submitting your application.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -190,12 +220,18 @@ export const RequestAccessModal: React.FC<RequestAccessModalProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center justify-end mt-12 pt-8 border-t border-border/20">
+              <div className="flex flex-col items-end gap-4 mt-12 pt-8 border-t border-border/20">
+                {error && (
+                  <p className="text-destructive font-sans text-xs text-right w-full">
+                    {error}
+                  </p>
+                )}
                 <button
                   type="submit"
-                  className="flex items-center gap-3 font-sans text-[0.65rem] tracking-[0.2em] uppercase text-foreground hover:text-primary transition-colors"
+                  disabled={isSubmitting}
+                  className="flex items-center gap-3 font-sans text-[0.65rem] tracking-[0.2em] uppercase text-foreground hover:text-primary transition-colors disabled:opacity-50"
                 >
-                  Submit Application <ArrowRight size={14} />
+                  {isSubmitting ? "Submitting..." : "Submit Application"} {!isSubmitting && <ArrowRight size={14} />}
                 </button>
               </div>
             </form>
