@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronDown } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 interface NavbarProps {
   onRequestAccess: () => void;
@@ -82,24 +75,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onRequestAccess }) => {
             </div>
 
             {/* Right side CTA & Mobile Hamburger */}
-            <div className="flex items-center justify-end">
-              <DropdownMenu>
-                <DropdownMenuTrigger className="hidden md:inline-flex items-center gap-2 border border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-2.5 font-sans text-[0.6rem] font-medium tracking-[0.2em] uppercase transition-colors duration-300 group">
-                  Members Portal
-                  <ChevronDown className="w-3 h-3 opacity-70 group-hover:opacity-100 transition-opacity" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent 
-                  align="end" 
-                  className="w-48 bg-background/95 backdrop-blur-md border-primary/20 rounded-none shadow-[0_0_30px_rgba(201,169,110,0.05)] p-2 mt-2"
-                >
-                  <DropdownMenuItem className="focus:bg-primary/10 focus:text-primary font-sans text-[0.65rem] tracking-[0.1em] uppercase cursor-pointer py-3" onClick={() => window.location.href = '#'}>
-                    Member Login
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="focus:bg-primary/10 focus:text-primary font-sans text-[0.65rem] tracking-[0.1em] uppercase cursor-pointer py-3" onClick={onRequestAccess}>
-                    Request Access
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+            <div className="flex items-center justify-end gap-4">
+              <Link
+                to="/login"
+                className="hidden md:inline-flex font-sans text-[0.6rem] font-medium tracking-[0.2em] uppercase text-muted-foreground hover:text-foreground transition-colors duration-300"
+              >
+                Members Portal
+              </Link>
+              <button
+                onClick={onRequestAccess}
+                className="hidden md:inline-flex border border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-2.5 font-sans text-[0.6rem] font-medium tracking-[0.2em] uppercase transition-colors duration-300"
+              >
+                Request Access
+              </button>
 
               {/* Mobile hamburger */}
               <button
@@ -143,15 +131,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onRequestAccess }) => {
           <div className="w-12 h-px bg-border/50 my-2" />
 
           <div className="flex flex-col items-center gap-6 mt-4">
-            <button
-              onClick={() => {
-                setMobileOpen(false);
-                window.location.href = '#';
-              }}
-              className="font-sans text-[0.7rem] font-medium tracking-[0.2em] uppercase text-foreground hover:text-primary"
+            <Link
+              to="/login"
+              onClick={() => setMobileOpen(false)}
+              className="font-sans text-[0.7rem] font-medium tracking-[0.2em] uppercase text-muted-foreground hover:text-foreground"
             >
-              Member Login
-            </button>
+              Members Portal
+            </Link>
             <button
               onClick={() => {
                 setMobileOpen(false);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X, ArrowRight, ArrowLeft } from "lucide-react";
+import { X, ArrowRight, ArrowLeft, ChevronDown } from "lucide-react";
 
 interface RequestAccessModalProps {
   isOpen: boolean;
@@ -132,29 +132,44 @@ export const RequestAccessModal: React.FC<RequestAccessModalProps> = ({
                     <label className="block font-sans text-[0.65rem] tracking-[0.2em] uppercase text-muted-foreground mb-3">
                       Playing Level
                     </label>
-                    <input
-                      type="text"
-                      name="level"
-                      required
-                      value={formData.level}
-                      onChange={handleChange}
-                      className="w-full bg-transparent border-b border-border/50 py-3 text-sm text-foreground focus:outline-none focus:border-primary transition-colors font-sans"
-                      placeholder="e.g., Professional, Ex-Pro, Division 1"
-                    />
+                    <div className="relative">
+                      <select
+                        name="level"
+                        required
+                        value={formData.level}
+                        onChange={(e) => handleChange(e as any)}
+                        className="w-full bg-transparent border-b border-border/50 py-3 pr-8 text-sm text-foreground focus:outline-none focus:border-primary transition-colors font-sans appearance-none cursor-pointer"
+                      >
+                        <option value="" disabled className="text-muted-foreground bg-background">Select your highest level</option>
+                        <option value="Professional / ATP" className="bg-background">Professional / ATP Ranked</option>
+                        <option value="Ex-Professional" className="bg-background">Ex-Professional</option>
+                        <option value="Division 1 College" className="bg-background">Division 1 College</option>
+                        <option value="Advanced Amateur (5.0+)" className="bg-background">Advanced Amateur (5.0+)</option>
+                        <option value="Intermediate" className="bg-background">Intermediate / Recreational</option>
+                      </select>
+                      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                    </div>
                   </div>
                   <div>
                     <label className="block font-sans text-[0.65rem] tracking-[0.2em] uppercase text-muted-foreground mb-3">
                       Typical Opponents
                     </label>
-                    <textarea
-                      name="partners"
-                      required
-                      rows={3}
-                      value={formData.partners}
-                      onChange={handleChange}
-                      className="w-full bg-transparent border-b border-border/50 py-3 text-sm text-foreground focus:outline-none focus:border-primary transition-colors font-sans resize-none"
-                      placeholder="Who do you usually train or compete with?"
-                    />
+                    <div className="relative">
+                      <select
+                        name="partners"
+                        required
+                        value={formData.partners}
+                        onChange={(e) => handleChange(e as any)}
+                        className="w-full bg-transparent border-b border-border/50 py-3 pr-8 text-sm text-foreground focus:outline-none focus:border-primary transition-colors font-sans appearance-none cursor-pointer"
+                      >
+                        <option value="" disabled className="text-muted-foreground bg-background">Who do you usually compete with?</option>
+                        <option value="Professional Athletes" className="bg-background">Professional Athletes</option>
+                        <option value="High-Net-Worth Executives" className="bg-background">High-Net-Worth Executives</option>
+                        <option value="Club Professionals" className="bg-background">Club Professionals</option>
+                        <option value="Recreational Players" className="bg-background">Recreational Players</option>
+                      </select>
+                      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                    </div>
                   </div>
                 </div>
               )}
@@ -165,15 +180,22 @@ export const RequestAccessModal: React.FC<RequestAccessModalProps> = ({
                     <label className="block font-sans text-[0.65rem] tracking-[0.2em] uppercase text-muted-foreground mb-3">
                       Statement of Intent
                     </label>
-                    <textarea
-                      name="intent"
-                      required
-                      rows={4}
-                      value={formData.intent}
-                      onChange={handleChange}
-                      className="w-full bg-transparent border-b border-border/50 py-3 text-sm text-foreground focus:outline-none focus:border-primary transition-colors font-sans resize-none"
-                      placeholder="Why are you seeking access to the Padel House network?"
-                    />
+                    <div className="relative">
+                      <select
+                        name="intent"
+                        required
+                        value={formData.intent}
+                        onChange={(e) => handleChange(e as any)}
+                        className="w-full bg-transparent border-b border-border/50 py-3 pr-8 text-sm text-foreground focus:outline-none focus:border-primary transition-colors font-sans appearance-none cursor-pointer"
+                      >
+                        <option value="" disabled className="text-muted-foreground bg-background">Why are you seeking access?</option>
+                        <option value="High-level competitive play" className="bg-background">High-level competitive play</option>
+                        <option value="Elite networking & matchmaking" className="bg-background">Elite networking & matchmaking</option>
+                        <option value="Professional coaching & development" className="bg-background">Professional coaching & development</option>
+                        <option value="Exclusive social events" className="bg-background">Exclusive social events</option>
+                      </select>
+                      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                    </div>
                   </div>
                 </div>
               )}
