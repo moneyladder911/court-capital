@@ -91,7 +91,7 @@ export const Experience: React.FC<ExperienceProps> = ({ onRequestAccess }) => {
           <div className="max-w-[450px]">
             <h3 className="font-display text-xl text-foreground mb-3">Padel House is strictly private.</h3>
             <p className="font-sans text-xs md:text-sm text-muted-foreground/80 leading-relaxed">
-              Access is managed by SW Lifestyle. Membership is limited to chosen professional athletes and founders to protect the integrity of the experience.
+              Access is managed by SW Lifestyle. Membership is limited to chosen ones to protect the integrity of the experience.
             </p>
           </div>
         </div>
