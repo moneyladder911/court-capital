@@ -6,18 +6,21 @@ const offerings = [
     title: "Competitive Matches",
     description:
       "Curated games with verified professional athletes. Every session is arranged, never open to the public.",
+    image: "/matchmaking.png"
   },
   {
     number: "02",
     title: "Leagues & Tournaments",
     description:
       "Seasonal competitions exclusively for members. Structured play at the highest level.",
+    image: "/padel-house-events.png"
   },
   {
     number: "03",
     title: "Private Coaching",
     description:
       "One-on-one sessions with world-class padel coaches. Tailored to your game, on your schedule.",
+    image: "/private-coaching.png"
   },
 ];
 
@@ -47,7 +50,7 @@ export const Offerings: React.FC = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-20 md:py-24 px-6">
+    <section ref={sectionRef} className="py-10 md:py-16 px-6">
       <div className="max-w-[1200px] mx-auto">
         {/* Section header */}
         <div className="reveal mb-14 md:mb-20 text-center flex flex-col items-center">
@@ -66,10 +69,18 @@ export const Offerings: React.FC = () => {
           {offerings.map((item, index) => (
             <div
               key={item.number}
-              className={`reveal reveal-delay-${index + 1}`}
+              className={`reveal reveal-delay-${index + 1} flex flex-col`}
             >
               {/* Top line */}
               <div className="w-12 h-px bg-border/50 mx-auto mb-8" />
+
+              {/* Image */}
+              <div className="relative aspect-[4/5] w-full overflow-hidden mb-8 group">
+                <div 
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105" 
+                  style={{ backgroundImage: `url('${item.image}')` }}
+                />
+              </div>
 
               {/* Number */}
               <p className="font-sans text-[0.65rem] font-medium tracking-[0.3em] uppercase text-primary mb-6 text-center">

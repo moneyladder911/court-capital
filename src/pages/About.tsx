@@ -76,52 +76,46 @@ const About = () => {
         <div className="divider max-w-[1200px] mx-auto" />
 
         {/* Story */}
-        <section ref={addRef} className="py-20 md:py-24 px-6">
-          <div className="max-w-[900px] mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
-              <div>
+        <section ref={addRef} className="py-20 md:py-32 px-6">
+          <div className="max-w-[1200px] mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+              {/* Image side */}
+              <div className="reveal relative aspect-[4/5] w-full max-w-[500px] mx-auto lg:mx-0 overflow-hidden">
+                <div 
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 hover:scale-105"
+                  style={{ backgroundImage: "url('/midpage-detail.png')" }}
+                />
+              </div>
+
+              {/* Text side */}
+              <div className="max-w-[500px]">
                 <p className="reveal font-sans text-[0.65rem] font-medium tracking-[0.35em] uppercase text-muted-foreground mb-6">
                   The Story
                 </p>
-                <h2 className="reveal reveal-delay-1 font-display text-2xl md:text-3xl text-foreground mb-6">
+                <h2 className="reveal reveal-delay-1 font-display text-3xl md:text-4xl lg:text-5xl text-foreground leading-[1.1] mb-8">
                   Born from a gap
                   <br />
                   in the market
                 </h2>
-              </div>
-              <div>
-                <p className="reveal reveal-delay-2 font-sans text-sm text-muted-foreground leading-relaxed mb-6">
-                  Dubai has world-class padel facilities. What it didn't
-                  have was a private environment where professional
-                  athletes could play competitively, away from the public
-                  eye, surrounded by peers who match their intensity.
-                </p>
-                <p className="reveal reveal-delay-3 font-sans text-sm text-muted-foreground leading-relaxed">
-                  Padel House was created to fill that void — a
-                  members-only club where every match is arranged, every
-                  opponent is verified, and the standard never drops.
-                </p>
+                <div className="space-y-6">
+                  <p className="reveal reveal-delay-2 font-sans text-sm md:text-base text-muted-foreground leading-relaxed">
+                    Dubai has world-class padel facilities. What it didn't
+                    have was a private environment where professional
+                    athletes could play competitively, away from the public
+                    eye, surrounded by peers who match their intensity.
+                  </p>
+                  <p className="reveal reveal-delay-3 font-sans text-sm md:text-base text-muted-foreground leading-relaxed">
+                    Padel House was created to fill that void — a
+                    members-only club where every match is arranged, every
+                    opponent is verified, and the standard never drops.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Image break */}
-        <div className="relative h-[40vh] md:h-[50vh] overflow-hidden my-4">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/hero-court.png')" }}
-          />
-          <div className="absolute inset-0 bg-black/50" />
-          <div
-            className="absolute top-0 left-0 right-0 h-24"
-            style={{ background: "linear-gradient(to bottom, hsl(0,0%,2%) 0%, transparent 100%)" }}
-          />
-          <div
-            className="absolute bottom-0 left-0 right-0 h-24"
-            style={{ background: "linear-gradient(to top, hsl(0,0%,2%) 0%, transparent 100%)" }}
-          />
-        </div>
+
 
         {/* Values */}
         <section ref={addRef} className="py-20 md:py-24 px-6">

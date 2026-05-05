@@ -41,17 +41,15 @@ export const ImageBreak: React.FC = () => {
         <div className="w-8 h-px bg-primary/60 mb-8 mx-auto" />
 
         <h2 className="font-display text-3xl md:text-5xl lg:text-5xl text-foreground mb-8 max-w-[700px] mx-auto leading-[1.1] drop-shadow-xl">
-          Padel House is <span className="italic text-primary">not</span> open
-          <br />
-          to the public.
+          Padel House is <span className="italic text-primary">strictly private.</span>
         </h2>
 
         <p className="font-sans font-normal text-base md:text-lg text-white/95 leading-relaxed max-w-[450px] mx-auto mb-10 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]">
-          Access is strictly managed by SW Lifestyle. Membership is strictly capped at 225 individuals globally to protect the integrity of the experience.
+          Access is managed by SW Lifestyle. Membership is limited globally to protect the integrity of the experience.
         </p>
 
         <p className="font-sans text-[0.6rem] md:text-[0.65rem] tracking-[0.3em] uppercase font-medium text-primary/80 drop-shadow-md">
-          This is how we protect the experience.
+          Invitation Only
         </p>
       </div>
 

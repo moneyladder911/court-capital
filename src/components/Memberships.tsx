@@ -6,11 +6,11 @@ interface MembershipsProps {
 
 const tiers = [
   {
-    name: "Elite Global",
+    name: "Elite",
     features: [
       "Comprehensive private sessions (padel or tennis)",
       "Priority booking for all events",
-      "Global access (Dubai, Marbella, London)",
+      "Exclusive access in Dubai",
       "Seeded league access",
       "Full family inclusion",
     ],
@@ -20,7 +20,7 @@ const tiers = [
     features: [
       "Core private sessions (padel or tennis)",
       "Access to all private events",
-      "Global access (Dubai, Marbella, London)",
+      "Exclusive access in Dubai",
       "League access",
       "Full family inclusion",
     ],
@@ -30,7 +30,7 @@ const tiers = [
     features: [
       "Introductory private sessions (padel or tennis)",
       "Event access",
-      "Global access (Dubai, Marbella, London)",
+      "Exclusive access in Dubai",
       "League access",
       "Full family inclusion",
     ],
@@ -63,7 +63,7 @@ export const Memberships: React.FC<MembershipsProps> = ({ onRequestAccess }) => 
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-20 md:py-24 px-6 relative border-t border-border/20">
+    <section ref={sectionRef} className="py-10 md:py-16 px-6 relative border-t border-border/20">
       <div className="relative z-10 max-w-[1200px] mx-auto">
         {/* Section header */}
         <div className="reveal mb-14 md:mb-20">

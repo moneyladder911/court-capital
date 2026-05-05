@@ -11,7 +11,7 @@ const experiences = [
   },
   {
     label: "The Network",
-    text: "A curated roster of professional footballers, Olympic athletes, and the global SW entertainment network. One membership connecting Dubai, Marbella, and London.",
+    text: "A curated roster of professional footballers, Olympic athletes, and the global SW entertainment network. Exclusive access across Dubai.",
   },
   {
     label: "The Calendar",
@@ -45,7 +45,7 @@ export const Experience: React.FC<ExperienceProps> = ({ onRequestAccess }) => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-20 md:py-24 px-6 relative">
+    <section ref={sectionRef} className="py-10 md:py-16 px-6 relative">
       {/* Subtle background accent */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -84,10 +84,16 @@ export const Experience: React.FC<ExperienceProps> = ({ onRequestAccess }) => {
         </div>
 
         {/* Bottom CTA */}
-        <div className="reveal reveal-delay-4 text-center mt-24">
-          <button onClick={onRequestAccess} className="btn-outline">
+        <div className="reveal reveal-delay-4 text-center mt-24 flex flex-col items-center">
+          <button onClick={onRequestAccess} className="btn-outline mb-8">
             Apply for Membership
           </button>
+          <div className="max-w-[450px]">
+            <h3 className="font-display text-xl text-foreground mb-3">Padel House is strictly private.</h3>
+            <p className="font-sans text-xs md:text-sm text-muted-foreground/80 leading-relaxed">
+              Access is managed by SW Lifestyle. Membership is limited to chosen professional athletes and founders to protect the integrity of the experience.
+            </p>
+          </div>
         </div>
       </div>
     </section>

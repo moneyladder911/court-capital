@@ -7,7 +7,7 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onRequestAccess }) => {
   return (
-    <footer className="py-14 md:py-20 px-6">
+    <footer className="py-10 md:py-16 px-6">
       <div className="max-w-[1200px] mx-auto">
         {/* Top divider */}
         <div className="divider mb-16" />
@@ -21,7 +21,7 @@ export const Footer: React.FC<FooterProps> = ({ onRequestAccess }) => {
               Padel House
             </p>
             <p className="font-display text-xl text-foreground mb-2">
-              Dubai | Marbella | London
+              Dubai
             </p>
             <p className="font-sans text-xs text-muted-foreground/60 italic">
               Exact location disclosed upon membership confirmation.
